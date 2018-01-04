@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/stanchino/react-startup-template.svg?branch=master)](https://travis-ci.org/stanchino/react-startup-template)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b74115ad272af1e077d0/maintainability)](https://codeclimate.com/github/stanchino/react-startup-template/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/b74115ad272af1e077d0/test_coverage)](https://codeclimate.com/github/stanchino/react-startup-template/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c7d67ce13a8fe81bbc81/maintainability)](https://codeclimate.com/github/stanchino/react-serverless-aws/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/c7d67ce13a8fe81bbc81/test_coverage)](https://codeclimate.com/github/stanchino/react-serverless-aws/test_coverage)
 
 # Project overview
 This project is a boilerplate for starting a new UI using ReactJS. It implements a basic user login form with

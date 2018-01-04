@@ -1,11 +1,11 @@
 {
-  "name": "react-auth-boilerplate",
+  "name": "react-serverless-aws",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stanchino/react-auth-boilerplate"
+    "url": "https://github.com/stanchino/react-serverless-aws"
   },
   "dependencies": {
     "@types/redux-actions": "^2.2.3",
@@ -31,7 +31,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --coverage -u",
+    "test": "react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
