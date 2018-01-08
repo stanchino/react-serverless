@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectedRouter } from "react-router-redux";
-import { SignUpLink, SignUpForm, ConfirmationForm, SignInLink, SignInForm, SignOutLink, Protected } from "./auth/components";
+import { SignUpForm, ConfirmationForm, UnauthenticatedLink, SignOutLink, SignInForm, Protected } from "./auth/components";
 import { NavLink } from "react-router-dom";
 import { Switch, Route, Redirect } from "react-router";
 
@@ -23,9 +23,11 @@ export default ({ history }) => (
                 <NavLink to="/" exact>Home</NavLink>
                 <NavLink to="/public" exact>Public</NavLink>
                 <NavLink to="/private" exact>Private</NavLink>
-                <SignInLink to="/auth/login" exact>Login</SignInLink>
-                <SignUpLink to="/auth/register" exact>Register</SignUpLink>
-                <SignOutLink className={"btn"}>Logout</SignOutLink>
+                <UnauthenticatedLink to="/auth/login" exact>Login</UnauthenticatedLink>
+                <UnauthenticatedLink to="/auth/register" exact>Register</UnauthenticatedLink>
+                <Protected component={null}>
+                    <SignOutLink className={"btn"}>Sign Out</SignOutLink>
+                </Protected>
             </nav>
             <Switch>
                 <Route exact path={"/"} component={Home} />

@@ -13,13 +13,19 @@ const { store } = configureStore(history);
 
 const ChildComponent = () => (<div/>);
 
-const subject = () => (
-    mount(<Provider store={store}><Protected component={SignInForm}><ChildComponent/></Protected></Provider>)
+const subject = (component = SignInForm) => (
+    mount(<Provider store={store}><Protected component={component}><ChildComponent/></Protected></Provider>)
 );
 
 describe("Protected Component", () => {
-    it("when the user is not registered", () => {
-        expect(subject()).toContainReact(<SignInForm />);
+    describe("when the user is not registered", () => {
+        it('and the component is not null', () => {
+            expect(subject()).toContainReact(<SignInForm />);
+        });
+
+        it('and the component is null', () => {
+            expect(subject(null)).not.toContainReact(<SignInForm/>);
+        })
     });
 
     it("when the user is logged in", () => {

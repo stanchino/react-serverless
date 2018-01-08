@@ -6,8 +6,6 @@ const LoginLink = ({ isLoggedIn, dispatch, ...props }) => (
     isLoggedIn ? null : <NavLink {...props} />
 );
 
-const mapStateToProps = state => ({
+export default connect(state => ({
     isLoggedIn: state.auth.signIn.isLoggedIn,
-});
-
-export default connect(mapStateToProps)(LoginLink);
+}))(LoginLink);

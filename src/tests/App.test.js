@@ -3,12 +3,12 @@ import { Provider } from "react-redux";
 import { mount } from "enzyme";
 
 import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "../stores/index";
+import configureStore from "../stores";
 
-import { Home, Public, PrivateComponent, NotFound } from "../components/index";
-import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/components/index";
+import { Home, Public, PrivateComponent, NotFound } from "../components";
+import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/components";
 
-import { signInRoutine, signOutRoutine } from "../auth/actions/index";
+import { signInRoutine, signOutRoutine } from "../auth/actions";
 
 import App from "../App";
 
