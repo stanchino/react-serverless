@@ -14,7 +14,7 @@ export const PrivateComponent = () => (
 );
 
 export const Private = () => (
-    <Protected component={<SignInForm />}>
+    <Protected component={SignInForm}>
         <PrivateComponent/>
     </Protected>
 );

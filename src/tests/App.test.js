@@ -6,7 +6,7 @@ import createMemoryHistory from "history/createBrowserHistory";
 import configureStore from "../stores/index";
 
 import { Home, Public, PrivateComponent, NotFound } from "../components/index";
-import { SignInForm, SignUpForm, SignOutLink } from "../auth/components/index";
+import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/components/index";
 
 import { signInRoutine, signOutRoutine } from "../auth/actions/index";
 
@@ -44,8 +44,9 @@ describe("routes", () => {
         testRoute("displays the NotFound component", "/testUrlForNotFound", NotFound);
         testRoute("shows the Login form for the /private path", "/private", SignInForm);
         testRoute("does not show the PrivateComponent for the /private path", "/private", PrivateComponent, 0);
-        testRoute("shows the registration form", "/register", SignUpForm);
-        testRoute("shows the login form", "/login", SignInForm);
+        testRoute("shows the registration form", "/auth/register", SignUpForm);
+        testRoute("shows the login form", "/auth/login", SignInForm);
+        testRoute("shows the confirmation form", "/auth/confirm", ConfirmationForm);
 
         describe("when the user logs in", () => {
             beforeEach(() => {
@@ -75,8 +76,9 @@ describe("routes", () => {
         testRoute("displays the NotFound component", "/testUrlForNotFound", NotFound);
         testRoute("does not show the Login form for the /private path", "/private", SignInForm, 0);
         testRoute("shows the PrivateComponent for the /private path", "/private", PrivateComponent);
-        behavesLikeRouteWithRedirect("/login");
-        behavesLikeRouteWithRedirect("/register");
+        behavesLikeRouteWithRedirect("/auth/login");
+        behavesLikeRouteWithRedirect("/auth/register");
+        behavesLikeRouteWithRedirect("/auth/confirm");
 
         it("logs the user out", () => {
             history.push("/");
