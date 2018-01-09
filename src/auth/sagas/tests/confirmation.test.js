@@ -3,7 +3,7 @@ import { push } from "react-router-redux";
 import { confirmationRoutine } from "../../actions";
 import { confirmationRequest } from "../../services";
 
-import { handleConfirmationSaga, getEmail } from "../confirmation";
+import { handleConfirmationSaga, getProfile } from "../confirmation";
 
 import { finalizeSaga, setupSelectSaga, testSelector, testServiceFailure } from "./shared-examples";
 
@@ -11,7 +11,7 @@ const values = { code: "1234" };
 const payload = { payload: { values: values } };
 
 const initializeSaga = () => (
-    setupSelectSaga(handleConfirmationSaga, payload, confirmationRoutine, getEmail, "john@doe.com")
+    setupSelectSaga(handleConfirmationSaga, payload, confirmationRoutine, getProfile, { email: "john@doe.com" })
 );
 
 describe("handleConfirmationSaga", () => {
@@ -36,4 +36,4 @@ describe("handleConfirmationSaga", () => {
     testServiceFailure(initializeSaga, confirmationRequest, confirmationRoutine, ["john@doe.com", values.code]);
 });
 
-testSelector(getEmail, { auth: { signUp: { email: "john@doe.com" } }}, "john@doe.com");
+testSelector(getProfile, { auth: { profile: { email: "john@doe.com" } }}, { email: "john@doe.com" });

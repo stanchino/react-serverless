@@ -7,5 +7,5 @@ const LoginLink = ({ isLoggedIn, dispatch, ...props }) => (
 );
 
 export default connect(state => ({
-    isLoggedIn: state.auth.signIn.isLoggedIn,
+    isLoggedIn: state.auth.isLoggedIn,
 }))(LoginLink);

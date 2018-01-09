@@ -12,7 +12,7 @@ export function* handleSignInSaga({ payload: { values: { email, password } } }) 
         yield put(signInRoutine.success(profile));
     } catch (error) {
         if ("UserNotConfirmedException" === error.code) {
-            yield put(signUpRoutine.fulfill({ isRegistered: true, email: email }));
+            yield put(signUpRoutine.success({ email: email }));
             yield put(push("/auth/confirm"));
         } else {
             yield formError(signInRoutine, {

@@ -46,7 +46,7 @@ describe("handleSignInSaga", () => {
         });
 
         it("and then triggers a signUp success action", result => {
-            expect(result).toEqual(put(signUpRoutine.fulfill({ isRegistered: true, email:  values.email })));
+            expect(result).toEqual(put(signUpRoutine.success({ email:  values.email })));
         });
 
         it("then redirects to the confirmation page", result => {

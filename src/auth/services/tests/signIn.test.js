@@ -10,10 +10,9 @@ const factory = assertion => ({
 
 describe("test signInRequest", () => {
     const subject = () => (require("../signIn").default);
-    const session = jest.fn();
     const expectCallbacks = (mock) => {
         expect(mock.CognitoUserPool).toHaveBeenCalled();
-        expect(mock.AuthenticationDetails).toHaveBeenCalledWith({Username: "user", Password: "pass"});
+        expect(mock.AuthenticationDetails).toHaveBeenCalledWith({ Username: "user", Password: "pass" });
         expect(mock.CognitoUser).toHaveBeenCalled();
     };
 
@@ -23,11 +22,11 @@ describe("test signInRequest", () => {
 
     it ('signs the user successfully', () => {
         const mock = factory(callbacks => (
-            callbacks.onSuccess(session)
+            callbacks.onSuccess()
         ));
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        expect(subject()("user", "pass")).resolves.toHaveProperty('session', session);
+        expect(subject()("user", "pass")).resolves.toBeTruthy();
         expectCallbacks(mock);
     });
 

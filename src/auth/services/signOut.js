@@ -1,8 +1,12 @@
-import { cognitoUser } from "./utils";
+import { userPool } from "./utils";
 
-export default function(username) {
+const currentUser = userPool.getCurrentUser();
 
-    cognitoUser(username).signOut();
-
-    return Promise.resolve();
-}
+export default () => (
+    new Promise((resolve, reject) => {
+        currentUser.globalSignOut({
+            onSuccess: result => resolve(result),
+            onFailure: error => reject(error)
+        });
+    })
+);

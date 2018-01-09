@@ -1,15 +1,14 @@
 import { call } from "redux-saga/effects";
 import { signOutRoutine } from "../../actions";
 import { signOutRequest } from "../../services";
-import { handleSignOutSaga, getProfile } from "../signOut";
+import { handleSignOutSaga } from "../signOut";
 
-import {finalizeSaga, setupSelectSaga, testSelector} from "./shared-examples";
+import { finalizeSaga, setupSaga } from "./shared-examples";
 
 const payload = {};
-const profile = { sub: "user" };
 
 const initializeSaga = () => (
-    setupSelectSaga(handleSignOutSaga, payload, signOutRoutine, getProfile, profile)
+    setupSaga(handleSignOutSaga, payload, signOutRoutine)
 );
 
 describe("handleSignOutSaga", () => {
@@ -17,11 +16,9 @@ describe("handleSignOutSaga", () => {
         const it = initializeSaga();
 
         it("calls signOutRequest", result => {
-            expect(result).toEqual(call(signOutRequest, profile.sub));
+            expect(result).toEqual(call(signOutRequest));
         });
 
         finalizeSaga(it, signOutRoutine);
     });
 });
-
-testSelector(getProfile, { auth: { signIn: { profile: profile } }}, profile);

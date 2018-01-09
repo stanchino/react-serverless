@@ -2,19 +2,11 @@ import React from "react";
 import { ConnectedRouter } from "react-router-redux";
 import { SignUpForm, ConfirmationForm, UnauthenticatedLink, SignOutLink, SignInForm, Protected } from "./auth/components";
 import { NavLink } from "react-router-dom";
-import { Switch, Route, Redirect } from "react-router";
+import { Switch, Route } from "react-router";
 
-import { Home, Private, Public, NotFound } from "./components";
+import { Home, Private, Public, NotFound, RouteWithRedirect } from "./components";
 
 import "./App.css";
-
-const RouteWithRedirect = ({ path , redirect = "/", ...props }) => (
-    <Route path={path}>
-        <Protected {...props}>
-            <Redirect to={redirect}/>
-        </Protected>
-    </Route>
-);
 
 export default ({ history }) => (
     <ConnectedRouter history={history}>
@@ -23,8 +15,8 @@ export default ({ history }) => (
                 <NavLink to="/" exact>Home</NavLink>
                 <NavLink to="/public" exact>Public</NavLink>
                 <NavLink to="/private" exact>Private</NavLink>
-                <UnauthenticatedLink to="/auth/login" exact>Login</UnauthenticatedLink>
-                <UnauthenticatedLink to="/auth/register" exact>Register</UnauthenticatedLink>
+                <UnauthenticatedLink to="/auth/login" exact>Sign In</UnauthenticatedLink>
+                <UnauthenticatedLink to="/auth/register" exact>Sign Up</UnauthenticatedLink>
                 <Protected component={null}>
                     <SignOutLink className={"btn"}>Sign Out</SignOutLink>
                 </Protected>

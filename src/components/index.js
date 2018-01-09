@@ -1,5 +1,15 @@
 import React from "react";
+import { Route, Redirect } from "react-router";
+
 import { SignInForm, Protected } from "../auth/components";
+
+export const RouteWithRedirect = ({ path , redirect = "/", ...props }) => (
+    <Route path={path}>
+        <Protected {...props}>
+            <Redirect to={redirect}/>
+        </Protected>
+    </Route>
+);
 
 export const Home = () => (
     <div>Home</div>

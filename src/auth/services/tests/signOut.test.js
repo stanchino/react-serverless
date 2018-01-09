@@ -1,22 +1,25 @@
-import { expectCallbacks } from "./shared-examples";
+const subject = () => (require("../signOut").default);
+
+const mockFactory = (method, result) => ({
+    CognitoUserPool: jest.fn(() => ({
+        getCurrentUser: jest.fn(() => ({
+            globalSignOut: callback => callback[method](result)
+        }))
+    }))
+});
+
+const handlesResponse = (method, result, exected_method) => {
+    const mocks = mockFactory(method, result);
+    jest.doMock("amazon-cognito-identity-js", () => (mocks));
+
+    expect(subject()())[exected_method].toEqual(result);
+}
 
 describe("test signOutRequest", () => {
-    const subject = () => (require("../signOut").default);
-
     beforeEach(() => {
         jest.resetModules();
     });
 
-    it ('signs the user out', () => {
-        const mocks = {
-            CognitoUserPool: jest.fn(),
-            CognitoUser: jest.fn(() => ({
-                signOut: jest.fn()
-            }))
-        };
-        jest.doMock("amazon-cognito-identity-js", () => (mocks));
-
-        expect(subject()({ sub: "userId" })).resolves.toEqual(undefined);
-        expectCallbacks([mocks.CognitoUserPool, mocks.CognitoUser]);
-    });
+    it ('when the response is successful', () => handlesResponse('onSuccess', 'success', 'resolves'));
+    it ('when the response is an error', () =>  handlesResponse('onFailure', 'error', 'rejects'));
 });

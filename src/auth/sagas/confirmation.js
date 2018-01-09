@@ -6,11 +6,11 @@ import { confirmationRequest } from "../services";
 
 import { formError } from ".";
 
-export const getEmail = state => (state.auth.signUp.email);
+export const getProfile = state => ({ ...state.auth.profile });
 
 export function* handleConfirmationSaga({ payload: { values: { code } } }) {
     try {
-        const email = yield select(getEmail);
+        const { email } = yield select(getProfile);
         yield put(confirmationRoutine.request());
         yield call(confirmationRequest, email, code);
         yield put(confirmationRoutine.success());

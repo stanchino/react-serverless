@@ -12,12 +12,8 @@ export default (username, password) => {
 
     return new Promise((resolve, reject) => {
         user.authenticateUser(authenticationDetails, {
-            onSuccess: function (session) {
-                resolve({user: user, session: session});
-            },
-            onFailure: function (err) {
-                reject(err);
-            }
+            onSuccess: () => resolve(user),
+            onFailure: error => reject(error)
         })
     })
 };
