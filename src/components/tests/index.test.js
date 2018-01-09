@@ -25,7 +25,7 @@ describe("components", () => {
 
 describe("Private", () => {
     const history = createMemoryHistory();
-    const { _, store } = configureStore(history);
+    const store = configureStore(history);
     let subject;
 
     describe("for unauthenticated users", () => {

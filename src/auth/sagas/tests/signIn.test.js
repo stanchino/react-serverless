@@ -1,11 +1,12 @@
-import {call, put } from "redux-saga/effects";
-import { signInRoutine, signUpRoutine } from "../../actions";
+import { call, put } from "redux-saga/effects";
+import { push } from "react-router-redux";
+import {signInRoutine, signUpRoutine} from "../../actions";
 import { signInRequest, userAttributes } from "../../services";
 import { handleSignInSaga } from "../signIn";
 
 import { finalizeSaga, setupSaga, testServiceFailure } from "./shared-examples";
 
-const values = { username: "user", password: "pass" };
+const values = { email: "user", password: "pass" };
 const payload = { payload: { values: values } };
 
 const initializeSaga = () => (
@@ -18,7 +19,7 @@ describe("handleSignInSaga", () => {
         const cognitoUser = jest.fn();
 
         it("calls loginRequest", result => {
-            expect(result).toEqual(call(signInRequest, values.username, values.password));
+            expect(result).toEqual(call(signInRequest, values.email, values.password));
             return { user: cognitoUser }
         });
 
@@ -40,16 +41,20 @@ describe("handleSignInSaga", () => {
         it("calls signInRequest", result => {
             let error = new Error("UserNotConfirmedException");
             error.code = "UserNotConfirmedException";
-            expect(result).toEqual(call(signInRequest, values.username, values.password));
+            expect(result).toEqual(call(signInRequest, values.email, values.password));
             return error;
         });
 
         it("and then triggers a signUp success action", result => {
-            expect(result).toEqual(put(signUpRoutine.success({ email: values.username })));
+            expect(result).toEqual(put(signUpRoutine.fulfill({ isRegistered: true, email:  values.email })));
+        });
+
+        it("then redirects to the confirmation page", result => {
+            expect(result).toEqual(put(push("/auth/confirm")));
         });
 
         finalizeSaga(it, signInRoutine);
     });
 
-    testServiceFailure(initializeSaga, signInRequest, signInRoutine, [values.username, values.password]);
+    testServiceFailure(initializeSaga, signInRequest, signInRoutine, [values.email, values.password]);
 });

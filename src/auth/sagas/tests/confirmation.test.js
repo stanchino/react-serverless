@@ -1,17 +1,17 @@
 import { call, put } from "redux-saga/effects";
-import { confirmationRoutine, signInRoutine } from "../../actions";
+import { push } from "react-router-redux";
+import { confirmationRoutine } from "../../actions";
 import { confirmationRequest } from "../../services";
 
-import { handleConfirmationSaga, getProfile } from "../confirmation";
+import { handleConfirmationSaga, getEmail } from "../confirmation";
 
 import { finalizeSaga, setupSelectSaga, testSelector, testServiceFailure } from "./shared-examples";
 
 const values = { code: "1234" };
 const payload = { payload: { values: values } };
-const profile = { email: "john@doe.com" };
 
 const initializeSaga = () => (
-    setupSelectSaga(handleConfirmationSaga, payload, confirmationRoutine, getProfile, profile)
+    setupSelectSaga(handleConfirmationSaga, payload, confirmationRoutine, getEmail, "john@doe.com")
 );
 
 describe("handleConfirmationSaga", () => {
@@ -19,21 +19,21 @@ describe("handleConfirmationSaga", () => {
         const it = initializeSaga();
 
         it("calls confirmationRequest", result => {
-            expect(result).toEqual(call(confirmationRequest, profile.email, values.code));
+            expect(result).toEqual(call(confirmationRequest, "john@doe.com", values.code));
         });
 
         it("and then triggers the confirmation success action", result => {
             expect(result).toEqual(put(confirmationRoutine.success()));
         });
 
-        it("and then triggers the signin success action", result => {
-            expect(result).toEqual(put(signInRoutine.success(profile)));
+        it("then redirects to the login URL", result => {
+            expect(result).toEqual(put(push("/auth/login")));
         });
 
         finalizeSaga(it, confirmationRoutine);
     });
 
-    testServiceFailure(initializeSaga, confirmationRequest, confirmationRoutine, [profile.email, values.code]);
+    testServiceFailure(initializeSaga, confirmationRequest, confirmationRoutine, ["john@doe.com", values.code]);
 });
 
-testSelector(getProfile, { auth: { signUp: { profile: profile } }}, profile);
+testSelector(getEmail, { auth: { signUp: { email: "john@doe.com" } }}, "john@doe.com");

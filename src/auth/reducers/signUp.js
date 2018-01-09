@@ -4,7 +4,7 @@ const initialState = {
     loading: false,
     isRegistered: false,
     isConfirmed: false,
-    profile: null
+    email: null
 };
 
 export default (state = initialState, action) => {
@@ -13,14 +13,15 @@ export default (state = initialState, action) => {
         case confirmationRoutine.REQUEST:
             return { ...state, loading: true};
         case signUpRoutine.SUCCESS:
-            return { ...state, isRegistered: true, isConfirmed: false, profile: action.payload };
+            return { ...state, isRegistered: true };
         case signUpRoutine.FAILURE:
-            return { ...state, isRegistered: false, isConfirmed: false, profile: null };
+            return { ...state, isRegistered: false };
         case confirmationRoutine.SUCCESS:
             return { ...state, isConfirmed: true };
         case confirmationRoutine.FAILURE:
             return { ...state, isConfirmed: false };
         case signUpRoutine.FULFILL:
+            return { ...state, loading: false, ...action.payload};
         case confirmationRoutine.FULFILL:
             return { ...state, loading: false};
         default:

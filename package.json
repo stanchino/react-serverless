@@ -23,15 +23,13 @@
     "redux": "^3.7.2",
     "redux-form": "^7.2.0",
     "redux-form-validators": "^2.3.2",
-    "redux-persist": "^5.4.0",
-    "redux-persist-cookie-storage": "^0.4.0",
     "redux-saga": "^0.15.0",
     "redux-saga-routines": "^2.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --coverage",
+    "test": "react-scripts test --env=jsdom --coverage -u",
     "eject": "react-scripts eject"
   },
   "devDependencies": {

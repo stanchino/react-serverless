@@ -13,7 +13,7 @@ import { signInRoutine, signOutRoutine } from "../auth/actions";
 import App from "../App";
 
 const history = createMemoryHistory();
-const { store } = configureStore(history);
+const store = configureStore(history);
 
 const subject = () => (
     mount(<Provider store={store}><App history={history}/></Provider>)

@@ -1,6 +1,7 @@
-import {call, put, select} from "redux-saga/effects";
+import { call, put, select} from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
 import sagaHelper from "redux-saga-testing";
+import { signUpRoutine } from "../../actions";
 
 export const setupSaga = (saga, payload, routine, beforeRequest = undefined) => {
     const it = sagaHelper(saga(payload));
@@ -23,9 +24,9 @@ export const setupSelectSaga = (saga, payload, routine, selector, selection) => 
     })
 );
 
-export const finalizeSaga = (it, routine) => {
+export const finalizeSaga = (it, routine, payload = undefined) => {
     it("finally triggers the fulfill action", result => {
-        expect(result).toEqual(put(routine.fulfill()));
+        expect(result).toEqual(put(routine.fulfill(payload)));
     });
 
     it("and then nothing", result => {
@@ -41,19 +42,23 @@ export const testSelector = (selector, state, expectedResult) => {
     });
 };
 
-export const testServiceFailure = (initialize, request, routine, args) => {
+export const testServiceFailure = (initialize, request, routine, args, finalPayload = undefined) => {
     describe("When saga fails", () => {
         const it = initialize();
 
-        it("calls confirmationRequest", result => {
+        it("calls the service request", result => {
             expect(result).toEqual(call(request, ...args));
-            return new Error("Error in the confirmation request.");
+            return new Error("Error in the request.");
         });
 
         it("and then triggers the failure action", result => {
             expect(result).toEqual(put(routine.failure(new SubmissionError())));
         });
 
-        finalizeSaga(it, routine);
+        finalizeSaga(it, routine, finalPayload);
     });
-}
+};
+
+export const testSignUpSuccess = (result, email) => {
+    expect(result).toEqual(put(signUpRoutine.success(email)));
+};

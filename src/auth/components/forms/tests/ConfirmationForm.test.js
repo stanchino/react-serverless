@@ -1,16 +1,15 @@
 import React from "react";
 import { Provider } from "react-redux";
 import createMemoryHistory from "history/createBrowserHistory";
-import { SubmissionError } from "redux-form";
 import { mount } from "enzyme";
 
-import configureStore from "../../../stores/index";
-import { matchSnapshot } from "./shared-examples";
+import configureStore from "../../../../stores";
+import { matchSnapshot, renderFormErrors } from "./shared-examples";
 
 import ConfirmationForm from "../ConfirmationForm";
 
 const history = createMemoryHistory();
-const { store } = configureStore(history);
+const store = configureStore(history);
 
 describe("ConfirmationForm", () => {
     matchSnapshot(<Provider store={store}><ConfirmationForm /></Provider>);
@@ -23,9 +22,5 @@ describe("ConfirmationForm", () => {
         expect(spy.mock.calls.length).toEqual(1)
     });
 
-    it("renders errors", () => {
-        const subject = mount(<Provider store={store}><ConfirmationForm onSubmit={() => { throw new SubmissionError({ _error: "error message" }) } }/></Provider>);
-        subject.find("form").simulate("submit");
-        expect(subject.text()).toMatch("error message");
-    });
+    renderFormErrors(ConfirmationForm, store, { _error: "error message" });
 });

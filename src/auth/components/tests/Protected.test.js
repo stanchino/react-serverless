@@ -3,13 +3,13 @@ import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import createMemoryHistory from "history/createBrowserHistory";
 
-import configureStore from "../../../stores/index";
+import configureStore from "../../../stores";
 
-import { Protected, SignInForm }  from "../index";
-import { signInRoutine } from "../../actions/index";
+import { Protected, SignInForm }  from "..";
+import { signInRoutine } from "../../actions";
 
 const history = createMemoryHistory();
-const { store } = configureStore(history);
+const store = configureStore(history);
 
 const ChildComponent = () => (<div/>);
 

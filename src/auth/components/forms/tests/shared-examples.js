@@ -1,7 +1,9 @@
 import React from 'react';
+import { mount } from "enzyme";
+
 import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
-import { mount } from "enzyme/build/index";
+
 import { SubmissionError } from "redux-form";
 
 export const matchSnapshot = (component) => {

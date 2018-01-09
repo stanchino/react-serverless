@@ -9,6 +9,6 @@ const Form = ({ error, handleSubmit, onSubmit, pristine, reset, submitting, chil
     </form>
 );
 
-export default (children) => (props) => (
+export default children => props => (
     <Form {...props} children={children}/>
 );

@@ -9,7 +9,7 @@ describe("signUp reducer", () => {
             loading: false,
             isRegistered: false,
             isConfirmed: false,
-            profile: null
+            email: null
         });
     });
 
@@ -18,20 +18,16 @@ describe("signUp reducer", () => {
             loading: true
         });
 
-        testAction(reducer, signUpRoutine.success({ username: "user" }), {
-            isRegistered: true,
-            isConfirmed: false,
-            profile: { username: "user" }
+        testAction(reducer, signUpRoutine.success(), {
+            isRegistered: true
         });
 
         testAction(reducer, signUpRoutine.failure(), {
-            isRegistered: false,
-            isConfirmed: false,
-            profile: null
+            isRegistered: false
         });
 
-        testAction(reducer, signUpRoutine.fulfill(), {
-            loading: false
+        testAction(reducer, signUpRoutine.fulfill({ isRegistered: true, email: "john@doe.com" }), {
+            loading: false, isRegistered: true, email: "john@doe.com"
         });
     });
 
@@ -40,7 +36,7 @@ describe("signUp reducer", () => {
             loading: true
         });
 
-        testAction(reducer, confirmationRoutine.success({ username: "user" }), {
+        testAction(reducer, confirmationRoutine.success(), {
             isConfirmed: true
         });
 
