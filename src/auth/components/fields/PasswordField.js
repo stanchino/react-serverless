@@ -4,6 +4,6 @@ import { required } from "redux-form-validators";
 
 import FormField from "./FormField";
 
-export default (props) => (
+export default props => (
     <Field component={FormField} type="password" name="password" placeholder="Password" validate={ required() } {...props} />
 );

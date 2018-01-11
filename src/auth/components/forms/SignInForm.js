@@ -1,17 +1,16 @@
 import React from "react";
-import { reduxForm } from "redux-form";
 
 import { signIn } from "../../actions";
 
 import { EmailField, PasswordField } from "../fields"
 
-import wrapWithForm from "./Form";
+import { wrapWithForm, connectedForm } from "./Form";
 
 const SignInForm = wrapWithForm(
     <div className={"form-inputs"}>
-        <EmailField />
-        <PasswordField />
+        <EmailField autoComplete={"email"} />
+        <PasswordField autoComplete={"new-password"} />
     </div>
 );
 
-export default reduxForm({ form: "signIn", onSubmit: signIn, submitText: "Sign In" })(SignInForm);
+export default connectedForm({ form: "signIn", onSubmit: signIn, submitText: "Sign In", component: SignInForm });

@@ -1,11 +1,12 @@
-import { userPool } from "./utils";
-
-const currentUser = userPool.getCurrentUser();
-
-export default () => (
+export default (user) => (
     new Promise((resolve, reject) => {
-        currentUser.globalSignOut({
-            onSuccess: result => resolve(result),
+        user.globalSignOut({
+            onSuccess: result => {
+                user.signOut();
+                user.clearCachedTokens();
+                user.clearCachedDeviceKeyAndPassword();
+                resolve(result);
+            },
             onFailure: error => reject(error)
         });
     })

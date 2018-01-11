@@ -6,7 +6,7 @@ import { mount } from "enzyme";
 import { matchSnapshot, renderFormErrors } from "./shared-examples";
 
 import configureStore from "../../../../stores";
-import { SignInForm } from "../";
+import { SignInForm } from "..";
 
 const history = createMemoryHistory();
 const store = configureStore(history);
@@ -15,7 +15,7 @@ describe("SignInForm", () => {
     const spy = jest.fn();
     const subject = mount(<Provider store={store}><SignInForm onSubmit={spy}/></Provider>);
 
-    matchSnapshot(<Provider store={store}><SignInForm/></Provider>);
+    matchSnapshot(<Provider store={store}><SignInForm /></Provider>);
 
     it("submits the form", () => {
         subject.find("input[name='email']").simulate("change", { target: { value: "john@doe.com" } });
@@ -24,5 +24,5 @@ describe("SignInForm", () => {
         expect(spy.mock.calls.length).toEqual(1)
     });
 
-    renderFormErrors(SignInForm, store, { email: "Invalid User", _error: "SignIn Form Error"});
+    renderFormErrors(SignInForm, store, history, { email: "Invalid User", _error: "SignIn Form Error"});
 });

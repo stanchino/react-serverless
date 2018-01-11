@@ -1,28 +1,26 @@
 import { call, put } from "redux-saga/effects";
-import { push } from "react-router-redux";
+import { replace } from "react-router-redux";
 
-import { signUpRoutine } from "../actions";
-import { signUpRequest}  from "../services";
+import { signUpRoutine, signInRoutine } from "../actions";
+import { signUpRequest }  from "../services";
 import { formError } from ".";
 
-export function* handleSignUpSaga({ payload: { values: { email, password } } }) {
-    let isRegistered = false;
+export function* handleSignUpSaga({ payload: { values } }) {
+    const { email, password } = values;
     try {
-        yield put(signUpRoutine.request());
+        yield put(signUpRoutine.request({ profile: values }));
         yield call(signUpRequest, email, password);
-        yield put(signUpRoutine.success());
-        isRegistered = true;
-        yield put(push("/auth/confirm"));
+        yield put(signUpRoutine.success({ profile: { email: email, password: password } }));
+        yield put(replace("/auth/confirm"));
+        yield put(signUpRoutine.fulfill())
     } catch (error) {
-        let errors = {
-            _error: error.message
-        };
         if ("UsernameExistsException" === error.code) {
-            isRegistered = true;
-            errors.email = "User already exists.";
+            yield put(signInRoutine.trigger({ values: { email: email, password: password } }));
+            yield put(signUpRoutine.success({ profile: { email: email, password: password }, flash: { error: error.message } }));
+            yield put(replace("/auth/login"));
+        } else {
+            yield formError(signUpRoutine, { _error: error.message });
+            yield put(signUpRoutine.fulfill())
         }
-        yield formError(signUpRoutine, errors);
-    } finally {
-        yield put(signUpRoutine.fulfill({ isRegistered: isRegistered, email: email }));
     }
 }

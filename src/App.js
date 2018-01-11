@@ -25,9 +25,9 @@ export default ({ history }) => (
                 <Route exact path={"/"} component={Home} />
                 <Route path={"/public"} component={Public} />
                 <Route path={"/private"} component={Private} />
-                <RouteWithRedirect path={"/auth/login"} component={SignInForm} />
-                <RouteWithRedirect path={"/auth/register"} component={SignUpForm} />
-                <RouteWithRedirect path={"/auth/confirm"} component={ConfirmationForm} />
+                <RouteWithRedirect exact path={"/auth/login"} component={SignInForm} />
+                <RouteWithRedirect exact path={"/auth/register"} component={SignUpForm} />
+                <RouteWithRedirect exact path={"/auth/confirm"} component={ConfirmationForm} />
                 <Route component={NotFound} />
             </Switch>
         </div>

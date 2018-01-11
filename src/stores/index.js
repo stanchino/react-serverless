@@ -5,11 +5,15 @@ import { routerMiddleware } from "react-router-redux";
 import rootReducer from "../reducers";
 import rootSagas from "../sagas";
 
+import { authRoutine } from "../auth/actions";
+
 export default history => {
     const sagaMiddleware = createSagaMiddleware();
     const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
 
     rootSagas.forEach(sagaMiddleware.run);
+
+    store.dispatch(authRoutine.trigger());
 
     return store;
 }

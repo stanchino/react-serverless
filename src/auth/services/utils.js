@@ -13,3 +13,5 @@ export const cognitoUser = username => {
 
     return new CognitoUser(userData);
 };
+
+export const currentUser = userPool.getCurrentUser();

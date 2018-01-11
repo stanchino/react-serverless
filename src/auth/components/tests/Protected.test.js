@@ -5,13 +5,14 @@ import createMemoryHistory from "history/createBrowserHistory";
 
 import configureStore from "../../../stores";
 
-import { Protected, SignInForm }  from "..";
-import { signInRoutine } from "../../actions";
+import { Protected }  from "..";
+import { authRoutine } from "../../actions";
 
 const history = createMemoryHistory();
 const store = configureStore(history);
 
 const ChildComponent = () => (<div/>);
+const SignInForm = () => (<form/>);
 
 const subject = (component = SignInForm) => (
     mount(<Provider store={store}><Protected component={component}><ChildComponent/></Protected></Provider>)
@@ -29,7 +30,7 @@ describe("Protected Component", () => {
     });
 
     it("when the user is logged in", () => {
-        store.dispatch(signInRoutine.success());
+        store.dispatch(authRoutine.success());
         expect(subject()).toContainReact(<ChildComponent/>);
     });
 });

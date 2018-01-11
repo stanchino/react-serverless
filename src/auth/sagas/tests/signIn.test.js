@@ -1,16 +1,16 @@
 import { call, put } from "redux-saga/effects";
-import { push } from "react-router-redux";
-import {signInRoutine, signUpRoutine} from "../../actions";
-import { signInRequest, userAttributes } from "../../services";
-import { handleSignInSaga } from "../signIn";
+import { replace } from "react-router-redux";
+import { signInRoutine, signUpRoutine, authRoutine } from "../../actions";
+import { signInRequest } from "../../services";
+import { handleSignInSaga, location } from "../signIn";
 
-import { finalizeSaga, setupSaga, testServiceFailure } from "./shared-examples";
+import { finalizeSaga, setupSelectSaga, testServiceFailure, testSelector } from "./shared-examples";
 
 const values = { email: "user", password: "pass" };
 const payload = { payload: { values: values } };
 
 const initializeSaga = () => (
-    setupSaga(handleSignInSaga, payload, signInRoutine)
+    setupSelectSaga(handleSignInSaga, payload, signInRoutine, location, { pathname: '/path' }, { profile: values })
 );
 
 describe("handleSignInSaga", () => {
@@ -20,19 +20,20 @@ describe("handleSignInSaga", () => {
 
         it("calls loginRequest", result => {
             expect(result).toEqual(call(signInRequest, values.email, values.password));
-            return { user: cognitoUser }
-        });
-
-        it("and then calls userAttributes", result => {
-            expect(result).toEqual(call(userAttributes, cognitoUser));
-            return 'profile';
+            return cognitoUser;
         });
 
         it("and then triggers the login success action", result => {
-            expect(result).toEqual(put(signInRoutine.success('profile')));
+            expect(result).toEqual(put(signInRoutine.success({ user: cognitoUser })));
         });
 
-        finalizeSaga(it, signInRoutine);
+        it("and triggers the authRoutine", result => {
+            expect(result).toEqual(put(authRoutine.trigger()));
+        });
+
+        it("and then nothing", result => {
+            expect(result).toBeUndefined();
+        });
     });
 
     describe("When the user is not confirmed", () => {
@@ -46,11 +47,11 @@ describe("handleSignInSaga", () => {
         });
 
         it("and then triggers a signUp success action", result => {
-            expect(result).toEqual(put(signUpRoutine.success({ email:  values.email })));
+            expect(result).toEqual(put(signUpRoutine.success({ profile: values, flash: { error: "UserNotConfirmedException" }, pathname: "/path" })));
         });
 
         it("then redirects to the confirmation page", result => {
-            expect(result).toEqual(put(push("/auth/confirm")));
+            expect(result).toEqual(put(replace("/auth/confirm")));
         });
 
         finalizeSaga(it, signInRoutine);
@@ -58,3 +59,5 @@ describe("handleSignInSaga", () => {
 
     testServiceFailure(initializeSaga, signInRequest, signInRoutine, [values.email, values.password]);
 });
+
+testSelector(location, { router: { location: { pathname: "path" } } }, { pathname: "path" });

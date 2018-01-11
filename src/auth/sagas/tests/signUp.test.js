@@ -1,9 +1,8 @@
 import { call, put } from "redux-saga/effects";
-import { push } from "react-router-redux";
-import { SubmissionError } from "redux-form";
+import { replace } from "react-router-redux";
 
 import { signUpRequest } from "../../services";
-import { signUpRoutine } from "../../actions";
+import { signUpRoutine, signInRoutine } from "../../actions";
 
 import { handleSignUpSaga } from "../signUp";
 
@@ -13,7 +12,7 @@ const values = { email: "john@doe.com", password: "pass" };
 const payload = { payload: { values: values } };
 
 const initializeSaga = () => (
-    setupSaga(handleSignUpSaga, payload, signUpRoutine)
+    setupSaga(handleSignUpSaga, payload, signUpRoutine, undefined, { profile: values })
 );
 
 describe("handleSignUpSaga", () => {
@@ -25,35 +24,43 @@ describe("handleSignUpSaga", () => {
         });
 
         it("and triggers the signUp success action", result => {
-            testSignUpSuccess(result, undefined);
+            testSignUpSuccess(result, { profile: { email: values.email, password: values.password } });
         });
 
         it("then redirects to the confirmation URL", result => {
-            expect(result).toEqual(put(push("/auth/confirm")));
+            expect(result).toEqual(put(replace("/auth/confirm")));
         });
 
-        finalizeSaga(it, signUpRoutine, { isRegistered: true, email: values.email });
+        finalizeSaga(it, signUpRoutine);
     });
 
-    testServiceFailure(initializeSaga, signUpRequest, signUpRoutine, [values.email, values.password], { isRegistered: false, email: values.email });
+    testServiceFailure(initializeSaga, signUpRequest, signUpRoutine, [values.email, values.password]);
 
     describe("When the user already exists", () => {
+        let error;
         const it = initializeSaga();
-        let error = new Error("Error UsernameExistsException");
-        error.code = "UsernameExistsException";
 
         it("calls signUpRequest", result => {
+            error = new Error("Error UsernameExistsException");
+            error.code = "UsernameExistsException";
             expect(result).toEqual(call(signUpRequest, values.email, values.password));
             return error;
         });
 
-        it("and then triggers the failure action", result => {
-            expect(result).toEqual(put(signUpRoutine.failure(new SubmissionError({
-                email: "User already exists.",
-                _error: "Error UsernameExistsException"
-            }))));
+        it("then triggers the signInRoutine", result => {
+            expect(result).toEqual(put(signInRoutine.trigger({ values: { email: values.email, password: values.password } })));
         });
 
-        finalizeSaga(it, signUpRoutine, { isRegistered: true, email: values.email });
+        it("and triggers signUpRoutine success", result => {
+            expect(result).toEqual(put(signUpRoutine.success({ profile: { email: values.email, password: values.password }, flash: { error: error.message } })))
+        });
+
+        it("and redirects to the login route", result => {
+            expect(result).toEqual(put(replace("/auth/login")));
+        });
+
+        it("and then nothing", result => {
+            expect(result).toBeUndefined();
+        });
     });
 });

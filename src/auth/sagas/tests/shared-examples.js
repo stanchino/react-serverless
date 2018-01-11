@@ -3,25 +3,25 @@ import { SubmissionError } from "redux-form";
 import sagaHelper from "redux-saga-testing";
 import { signUpRoutine } from "../../actions";
 
-export const setupSaga = (saga, payload, routine, beforeRequest = undefined) => {
+export const setupSaga = (saga, payload, routine, beforeRequest, requestPayload) => {
     const it = sagaHelper(saga(payload));
 
     beforeRequest && beforeRequest(it);
 
     it("triggers the request action", result => {
-        expect(result).toEqual(put(routine.request()));
+        expect(result).toEqual(put(routine.request(requestPayload)));
     });
 
     return it;
 };
 
-export const setupSelectSaga = (saga, payload, routine, selector, selection) => (
+export const setupSelectSaga = (saga, payload, routine, selector, selection, requestPayload) => (
     setupSaga(saga, payload, routine, it => {
         it("retrieves the profile", result => {
             expect(result).toEqual(select(selector));
             return selection;
         });
-    })
+    }, requestPayload)
 );
 
 export const finalizeSaga = (it, routine, payload = undefined) => {
@@ -42,7 +42,7 @@ export const testSelector = (selector, state, expectedResult) => {
     });
 };
 
-export const testServiceFailure = (initialize, request, routine, args, finalPayload = undefined) => {
+export const testServiceFailure = (initialize, request, routine, args, finalPayload) => {
     describe("When saga fails", () => {
         const it = initialize();
 

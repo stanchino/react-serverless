@@ -4,6 +4,6 @@ import { email, required } from "redux-form-validators";
 
 import FormField from "./FormField";
 
-export default (props) => (
+export default props => (
     <Field component={FormField} type="text" name="email" placeholder="Email" validate={ [required(), email()] } {...props} />
 );

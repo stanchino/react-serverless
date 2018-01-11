@@ -1,4 +1,8 @@
 import React from 'react';
+
+import { ConnectedRouter } from "react-router-redux";
+import { Switch } from "react-router";
+
 import { mount } from "enzyme";
 
 import { Provider } from "react-redux";
@@ -13,9 +17,17 @@ export const matchSnapshot = (component) => {
     });
 };
 
-export const renderFormErrors = (Component, store, errors) => {
+export const renderFormErrors = (Component, store, history, errors) => {
     it("renders errors", () => {
-        const subject = mount(<Provider store={store}><Component onSubmit={() => { throw new SubmissionError(errors) } }/></Provider>);
+        const subject = mount(
+            <Provider store={store}>
+                <ConnectedRouter history={history}>
+                    <Switch>
+                        <Component onSubmit={() => { throw new SubmissionError(errors) } }/>
+                    </Switch>
+                </ConnectedRouter>
+            </Provider>
+        );
         subject.find("form").simulate("submit");
         Object.values(errors).forEach(message => {
             expect(subject.text()).toMatch(message);

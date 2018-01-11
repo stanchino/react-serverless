@@ -1,11 +1,15 @@
-import { signUpRoutine, signInRoutine, confirmationRoutine, signOutRoutine } from "../actions";
+import { signUpRoutine, confirmationRoutine, signInRoutine, authRoutine, signOutRoutine } from "../actions";
 
-const initialState = {
+const flash = { flash: { error: null, notice: null } };
+
+export const initialState = {
     loading: false,
     isLoggedIn: false,
     isRegistered: false,
-    isConfirmed: false,
-    profile: null
+    profile: null,
+    pathname: '/',
+    user: null,
+    ...flash
 };
 
 export default (state = initialState, action) => {
@@ -14,22 +18,22 @@ export default (state = initialState, action) => {
         case confirmationRoutine.REQUEST:
         case signInRoutine.REQUEST:
         case signOutRoutine.REQUEST:
-            return { ...state, loading: true};
+            return { ...state, loading: true, ...flash, ...action.payload };
+        case authRoutine.REQUEST:
+            return { ...state, loading: true };
         case signUpRoutine.SUCCESS:
-            return { ...state, isRegistered: true, profile: action.payload };
+        case signInRoutine.SUCCESS:
+            return { ...state, isRegistered: true, ...action.payload };
         case signUpRoutine.FAILURE:
             return { ...state, isRegistered: false };
-        case confirmationRoutine.SUCCESS:
-            return { ...state, isConfirmed: true };
-        case confirmationRoutine.FAILURE:
-            return { ...state, isConfirmed: false };
-        case signInRoutine.SUCCESS:
-            return { ...state, isLoggedIn: true, profile: action.payload };
-        case signInRoutine.FAILURE:
-            return { ...state, isLoggedIn: false };
+        case authRoutine.SUCCESS:
+            return { ...state, isLoggedIn: true, isRegistered: true, ...action.payload };
+        case authRoutine.FAILURE:
+            return { ...state, isLoggedIn: false, ...action.payload };
         case signUpRoutine.FULFILL:
         case confirmationRoutine.FULFILL:
         case signInRoutine.FULFILL:
+        case authRoutine.FULFILL:
             return { ...state, loading: false };
         case signOutRoutine.FULFILL:
             return initialState;

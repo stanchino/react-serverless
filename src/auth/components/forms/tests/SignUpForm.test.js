@@ -8,7 +8,7 @@ import { matchSnapshot, renderFormErrors } from "./shared-examples";
 
 import configureStore from "../../../../stores";
 
-import { SignUpForm } from "../";
+import { SignUpForm } from "..";
 
 const history = createMemoryHistory();
 const store = configureStore(history);
@@ -27,5 +27,5 @@ describe("SignUpForm", () => {
         expect(spy).toHaveBeenCalled()
     });
 
-    renderFormErrors(SignUpForm, store, { email: "Invalid User", _error: "SignUp Form Error"});
+    renderFormErrors(SignUpForm, store, history, { email: "Invalid User", _error: "SignUp Form Error"});
 });

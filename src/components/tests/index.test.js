@@ -7,8 +7,7 @@ import createMemoryHistory from "history/createBrowserHistory";
 import configureStore from "../../stores";
 
 import { Home, Public, PrivateComponent, Private, NotFound } from "..";
-import { SignInForm } from "../../auth/components";
-import { signInRoutine } from "../../auth/actions";
+import { authRoutine } from "../../auth/actions";
 
 const testComponent = (description, component) => {
     it(description, () => {
@@ -33,9 +32,6 @@ describe("Private", () => {
             subject = mount(<Provider store={store}><Private/></Provider>);
         });
 
-        it("will render the login form", () => {
-            expect(subject).toContainReact(<SignInForm/>);
-        });
 
         it("will not show the private contents", () => {
             expect(subject).not.toContainReact(<PrivateComponent/>);
@@ -44,12 +40,8 @@ describe("Private", () => {
 
     describe("for authenticated users", () => {
         beforeEach(() => {
-            store.dispatch(signInRoutine.success({profile: "blah"}));
+            store.dispatch(authRoutine.success({ profile: { email: "john@doe.com", password: "pass" } }));
             subject = mount(<Provider store={store}><Private/></Provider>);
-        });
-
-        it("will not render the login form", () => {
-            expect(subject).not.toContainReact(<SignInForm/>);
         });
 
         it("will show the private contents", () => {

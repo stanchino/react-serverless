@@ -8,7 +8,7 @@ import configureStore from "../stores";
 import { Home, Public, PrivateComponent, NotFound } from "../components";
 import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/components";
 
-import { signInRoutine, signOutRoutine } from "../auth/actions";
+import { signUpRoutine, authRoutine, signOutRoutine } from "../auth/actions";
 
 import App from "../App";
 
@@ -46,11 +46,10 @@ describe("routes", () => {
         testRoute("does not show the PrivateComponent for the /private path", "/private", PrivateComponent, 0);
         testRoute("shows the registration form", "/auth/register", SignUpForm);
         testRoute("shows the login form", "/auth/login", SignInForm);
-        testRoute("shows the confirmation form", "/auth/confirm", ConfirmationForm);
 
         describe("when the user logs in", () => {
             beforeEach(() => {
-                store.dispatch(signInRoutine.success({ username: "johndoe" }));
+                store.dispatch(authRoutine.success());
             });
 
             it("logs the user in with valid credentials", () => {
@@ -65,9 +64,16 @@ describe("routes", () => {
         });
     });
 
+    describe("for registered users", () => {
+        beforeEach(() => {
+            store.dispatch(signUpRoutine.success());
+        });
+        testRoute("shows the confirmation form", "/auth/confirm", ConfirmationForm);
+    });
+
     describe("for authenticated users", () => {
         beforeEach(() => {
-            store.dispatch(signInRoutine.success({ username: "johndoe" }));
+            store.dispatch(authRoutine.success());
         });
 
         testRoute("shows the home page", "/", Home);

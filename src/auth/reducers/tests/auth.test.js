@@ -1,5 +1,5 @@
-import reducer from "../auth";
-import {signUpRoutine, confirmationRoutine, signOutRoutine, signInRoutine} from "../../actions";
+import reducer, { initialState } from "../auth";
+import { signUpRoutine, confirmationRoutine, signInRoutine, authRoutine, signOutRoutine } from "../../actions";
 
 const testAction = (reducer, action, expectedState) => {
     it(`should handle ${action.type}`, () => {
@@ -7,12 +7,13 @@ const testAction = (reducer, action, expectedState) => {
     });
 };
 
-const behavesLikeReducerWithPayload = (routine, success, failure) => {
+const behavesLikeReducerWithPayload = (routine, success, failure, initial = initialState) => {
     testAction(reducer, routine.request(), {
-        loading: true
+        loading: true,
+        flash: initial.flash
     });
 
-    testAction(reducer, routine.success('payload'), {
+    testAction(reducer, routine.success({ profile: 'payload' }), {
         ...success,
         profile: 'payload'
     });
@@ -26,7 +27,8 @@ const behavesLikeReducerWithPayload = (routine, success, failure) => {
 
 const behavesLikeReducerWithoutPayload = (routine, success, failure) => {
     testAction(reducer, routine.request(), {
-        loading: true
+        loading: true,
+        flash: initialState.flash
     });
 
     testAction(reducer, routine.success(), success);
@@ -39,30 +41,16 @@ const behavesLikeReducerWithoutPayload = (routine, success, failure) => {
 };
 
 describe("auth reducer", () => {
-    it("should return the initial state", () => {
-        expect(reducer(undefined, {})).toEqual({
-            loading: false,
-            isLoggedIn: false,
-            isRegistered: false,
-            isConfirmed: false,
-            profile: null
-        });
-    });
-
+    it("should return the initial state", () => expect(reducer(undefined, {})).toEqual(initialState));
     describe("for the signUpRoutine", () => behavesLikeReducerWithPayload(signUpRoutine, { isRegistered: true }, { isRegistered: false }));
-    describe("for the confirmationRoutine", () => behavesLikeReducerWithoutPayload(confirmationRoutine, { isConfirmed: true }, { isConfirmed: false }));
-    describe("for the signUpRoutine", () => behavesLikeReducerWithPayload(signInRoutine, { isLoggedIn: true }, { isLoggedIn: false }));
+    describe("for the confirmationRoutine", () => behavesLikeReducerWithoutPayload(confirmationRoutine, {}, {}));
+    describe("for the signUpRoutine", () => behavesLikeReducerWithPayload(signInRoutine, { isRegistered: true }, {}));
+    describe("for the authRoutine", () => behavesLikeReducerWithPayload(authRoutine, { isLoggedIn: true, isRegistered: true }, { isLoggedIn: false }, { loading: true }));
     describe("for the signOutRoutine", () => {
         testAction(reducer, signOutRoutine.request(), {
-            loading: true
+            loading: true,
+            flash: initialState.flash
         });
-
-        testAction(reducer, signOutRoutine.fulfill(), {
-            loading: false,
-            isLoggedIn: false,
-            isRegistered: false,
-            isConfirmed: false,
-            profile: null
-        });
+        testAction(reducer, signOutRoutine.fulfill(), initialState);
     });
 });

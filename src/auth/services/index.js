@@ -1,13 +1,15 @@
-import signInRequest from "./signIn";
 import signUpRequest from "./signUp";
-import signOutRequest from "./signOut";
 import confirmationRequest from "./confirmation";
+import signInRequest from "./signIn";
+import authRequest from "./auth";
+import signOutRequest from "./signOut";
 import userAttributes from "./userAttributes";
 
 export {
-    signInRequest,
-    userAttributes,
     signUpRequest,
     confirmationRequest,
+    signInRequest,
+    authRequest,
+    userAttributes,
     signOutRequest
 }
