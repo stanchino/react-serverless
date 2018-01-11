@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+
 import { signOutRoutine } from "../actions";
 
 const Logout = ({ loading, children, actions, ...props }) => (

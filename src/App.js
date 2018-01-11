@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectedRouter } from "react-router-redux";
-import { SignUpForm, ConfirmationForm, UnauthenticatedLink, SignOutLink, SignInForm, Protected } from "./auth/components";
+import { SignUpForm, ConfirmationForm, UnauthenticatedLink, SignOutLink, SignInForm, Protected } from "./auth/containers";
 import { NavLink } from "react-router-dom";
 import { Switch, Route } from "react-router";
 

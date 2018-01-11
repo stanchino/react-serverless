@@ -6,7 +6,7 @@ import createMemoryHistory from "history/createBrowserHistory";
 import configureStore from "../stores";
 
 import { Home, Public, PrivateComponent, NotFound } from "../components";
-import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/components";
+import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/containers";
 
 import { signUpRoutine, authRoutine, signOutRoutine } from "../auth/actions";
 

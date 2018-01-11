@@ -6,12 +6,12 @@ import { Switch, Route } from "react-router";
 import createMemoryHistory from "history/createBrowserHistory";
 import { mount } from "enzyme";
 
-import configureStore from "../../../../stores";
+import configureStore from "../../../stores/index";
 import { matchSnapshot, renderFormErrors } from "./shared-examples";
 
-import ConfirmationForm from "../ConfirmationForm";
+import { ConfirmationForm } from "..";
 
-import { signUpRoutine } from "../../../actions";
+import { signUpRoutine } from "../../actions";
 
 const history = createMemoryHistory();
 const store = configureStore(history);

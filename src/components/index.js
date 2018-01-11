@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router";
 
-import { SignInForm, Protected } from "../auth/components";
+import { SignInForm, Protected } from "../auth/containers";
 
 export const RouteWithRedirect = ({ path , redirect = "/", ...props }) => (
     <Route path={path}>
