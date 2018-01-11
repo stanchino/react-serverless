@@ -1,28 +1,24 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Field, reduxForm } from "redux-form";
+import { Field } from "redux-form";
 import { Redirect } from "react-router";
 
-import { confirmation } from "../actions/index";
+import { confirmation } from "../actions";
 
-import { FormField, Messages, SubmitButton, ResetButton, ActionButton } from "../components";
+import { ActionButton, Form, FormField, ResetButton, SubmitButton } from "../components";
 
-const ConfirmationComponent = ({ error, handleSubmit, onSubmit, newCode, ...props }) => (
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <Messages error={error} />
+import connectForm from "./Form";
+
+const ConfirmationComponent = ({ newCode, ...props }) => (
+    <Form {...props}>
         <Field component={FormField} type="text" name="code" placeholder="Confirmation Code"/>
         <ActionButton onClick={newCode}>Request New Code</ActionButton>
         <SubmitButton {...props}>Confirm</SubmitButton>
         <ResetButton {...props}>Reset</ResetButton>
-    </form>
+    </Form>
 );
 
 const RegisteredOnlyComponent = ({ isRegistered, ...props }) => (
     isRegistered ? <ConfirmationComponent {...props} /> : <Redirect to={"/auth/register"} />
 );
 
-const ConnectedComponent = connect(state => ({
-    isRegistered: state.auth.isRegistered
-}))(RegisteredOnlyComponent);
-
-export default reduxForm({ form: "confirmation", onSubmit: confirmation, newCode: confirmation })(ConnectedComponent);
+export default connectForm({ form: "confirmation", onSubmit: confirmation, newCode: confirmation })(RegisteredOnlyComponent);

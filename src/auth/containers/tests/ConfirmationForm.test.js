@@ -6,7 +6,7 @@ import { Switch, Route } from "react-router";
 import createMemoryHistory from "history/createBrowserHistory";
 import { mount } from "enzyme";
 
-import configureStore from "../../../stores/index";
+import configureStore from "../../../stores";
 import { matchSnapshot, renderFormErrors } from "./shared-examples";
 
 import { ConfirmationForm } from "..";

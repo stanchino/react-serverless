@@ -1,19 +1,19 @@
 import React from "react";
-import { reduxForm } from "redux-form";
 
 import { signIn, signInRoutine } from "../actions";
 
-import { Email, Password, Messages, SubmitButton, ResetButton, ActionButton } from "../components";
+import { ActionButton, Email, Form, Password, ResetButton, SubmitButton } from "../components";
 
-const SignInForm = ({ error, handleSubmit, onSubmit, resetPassword, ...props }) => (
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <Messages error={error} />
+import connectForm from "./Form";
+
+const SignInForm = ({resetPassword, ...props }) => (
+    <Form {...props}>
         <Email autoComplete={"email"} />
         <Password autoComplete={"new-password"} />
         <ActionButton onClick={resetPassword}>Forgotten Password?</ActionButton>
         <SubmitButton {...props}>Sign In</SubmitButton>
         <ResetButton {...props}>Cancel</ResetButton>
-    </form>
+    </Form>
 );
 
-export default reduxForm({ form: "signIn", onSubmit: signIn, resetPassword: signInRoutine })(SignInForm);
+export default connectForm({ form: "signIn", onSubmit: signIn, resetPassword: signInRoutine })(SignInForm);

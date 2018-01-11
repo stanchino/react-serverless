@@ -1,18 +1,18 @@
 import React from "react";
 import { Provider } from "react-redux";
-import createMemoryHistory from "history/createBrowserHistory";
+import configureStore from "redux-mock-store";
 import { mount } from "enzyme";
 
-import { matchSnapshot, renderFormErrors } from "./shared-examples";
+import { matchSnapshot } from "./shared-examples";
+import { initialState } from "../../reducers/auth";
 
-import configureStore from "../../../stores";
 import { SignInForm } from "..";
 
-const history = createMemoryHistory();
-const store = configureStore(history);
+const mockStore = configureStore();
 
 describe("SignInForm", () => {
     const spy = jest.fn();
+    const store = mockStore({ auth: initialState });
     const subject = mount(<Provider store={store}><SignInForm onSubmit={spy}/></Provider>);
 
     matchSnapshot(<Provider store={store}><SignInForm /></Provider>);
@@ -23,6 +23,4 @@ describe("SignInForm", () => {
         subject.find("form").simulate("submit");
         expect(spy.mock.calls.length).toEqual(1)
     });
-
-    renderFormErrors(SignInForm, store, history, { email: "Invalid User", _error: "SignIn Form Error"});
 });

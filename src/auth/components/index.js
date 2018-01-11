@@ -1,5 +1,6 @@
 import ActionButton from "./ActionButton";
 import Email from "./Email";
+import Form from "../components/Form";
 import FormField from "./FormField";
 import Message from "./Message";
 import Messages from "./Messages";
@@ -8,4 +9,4 @@ import PasswordConfirmation from "./PasswordConfirmation";
 import ResetButton from "./ResetButton";
 import SubmitButton from "./SubmitButton";
 
-export { ActionButton, Email, FormField, Message, Messages, Password, PasswordConfirmation, ResetButton, SubmitButton }
+export { ActionButton, Email, Form, FormField, Message, Messages, Password, PasswordConfirmation, ResetButton, SubmitButton }
