@@ -1,22 +1,22 @@
-import React from 'react';
+import React from "react";
 import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
-import { mount } from "enzyme/build/index";
-import { SubmissionError } from "redux-form";
+import createStore from "redux-mock-store";
 
-export const matchSnapshot = (component) => {
-    it("matches the snapshot", () => {
-        const snapshot = renderer.create(component).toJSON();
-        expect(snapshot).toMatchSnapshot();
-    });
-};
+import { initialState } from "../../reducers/auth";
+import { AuthForm } from "../..";
 
-export const renderFormErrors = (Component, store, errors) => {
-    it("renders errors", () => {
-        const subject = mount(<Provider store={store}><Component onSubmit={() => { throw new SubmissionError(errors) } }/></Provider>);
-        subject.find("form").simulate("submit");
-        Object.values(errors).forEach(message => {
-            expect(subject.text()).toMatch(message);
-        });
-    });
-};
+const mockStore = createStore();
+const store = mockStore({ auth: initialState });
+
+export const matchFormSnapshot = Component => expect(renderer.create(
+    <Provider store={store}>
+        <AuthForm form={"test"} onSubmit={jest.fn()}>
+            <Component />
+        </AuthForm>
+    </Provider>
+).toJSON()).toMatchSnapshot();
+
+export const matchSnapshot = (Component, props = {}) => expect(renderer.create(
+    <Component {...props} />
+).toJSON()).toMatchSnapshot();

@@ -3,17 +3,17 @@ import { Provider } from "react-redux";
 import { mount } from "enzyme";
 
 import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "../stores/index";
+import configureStore from "../stores";
 
-import { Home, Public, PrivateComponent, NotFound } from "../components/index";
-import { SignInForm, SignUpForm, SignOutLink } from "../auth/components/index";
+import { ConfirmationForm, Home, NotFound, PrivateComponent, Public, SignInForm, SignUpForm } from "../components";
+import { SignOutLink } from "../auth";
 
-import { signInRoutine, signOutRoutine } from "../auth/actions/index";
+import { signUpRoutine, authRoutine, signOutRoutine } from "../auth/actions";
 
 import App from "../App";
 
 const history = createMemoryHistory();
-const { store } = configureStore(history);
+const store = configureStore(history);
 
 const subject = () => (
     mount(<Provider store={store}><App history={history}/></Provider>)
@@ -22,7 +22,12 @@ const subject = () => (
 const testRoute = (description, path, component, count = 1) => {
     it(description, () => {
         history.push(path);
-        expect(subject().find(component).length).toEqual(count);
+        if (1 === count) {
+            expect(subject()).toContainReact(component);
+        } else if (0 === count) {
+            expect(subject()).not.toContainReact(component);
+        }
+
     });
 };
 
@@ -44,17 +49,16 @@ describe("routes", () => {
         testRoute("displays the NotFound component", "/testUrlForNotFound", NotFound);
         testRoute("shows the Login form for the /private path", "/private", SignInForm);
         testRoute("does not show the PrivateComponent for the /private path", "/private", PrivateComponent, 0);
-        testRoute("shows the registration form", "/register", SignUpForm);
-        testRoute("shows the login form", "/login", SignInForm);
+        testRoute("shows the registration form", "/auth/register", SignUpForm);
+        testRoute("shows the login form", "/auth/login", SignInForm);
 
         describe("when the user logs in", () => {
             beforeEach(() => {
-                store.dispatch(signInRoutine.success({ username: "johndoe" }));
+                store.dispatch(authRoutine.success());
             });
 
             it("logs the user in with valid credentials", () => {
-                expect(subject().find(SignInForm).length).toEqual(0);
-                expect(subject().find(SignOutLink).length).toEqual(1);
+                expect(subject()).not.toContainReact(SignInForm);
             });
         });
 
@@ -64,19 +68,26 @@ describe("routes", () => {
         });
     });
 
+    describe("for registered users", () => {
+        beforeEach(() => {
+            store.dispatch(signUpRoutine.success());
+        });
+        testRoute("shows the confirmation form", "/auth/confirm", ConfirmationForm);
+    });
+
     describe("for authenticated users", () => {
         beforeEach(() => {
-            store.dispatch(signInRoutine.success({ username: "johndoe" }));
+            store.dispatch(authRoutine.success());
         });
 
         testRoute("shows the home page", "/", Home);
-        testRoute("shows the logout link", "/", SignOutLink);
         testRoute("shows the public page", "/public", Public);
         testRoute("displays the NotFound component", "/testUrlForNotFound", NotFound);
         testRoute("does not show the Login form for the /private path", "/private", SignInForm, 0);
         testRoute("shows the PrivateComponent for the /private path", "/private", PrivateComponent);
-        behavesLikeRouteWithRedirect("/login");
-        behavesLikeRouteWithRedirect("/register");
+        behavesLikeRouteWithRedirect("/auth/login");
+        behavesLikeRouteWithRedirect("/auth/register");
+        behavesLikeRouteWithRedirect("/auth/confirm");
 
         it("logs the user out", () => {
             history.push("/");

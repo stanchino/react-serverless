@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+
 import { signOutRoutine } from "../actions";
 
-const Logout = ({ isLoggedIn, children, actions, ...props }) => (
-    isLoggedIn ? <button {...props} onClick={actions.signOutRoutine}>{children}</button> : null
+const Logout = ({ loading, isLoggedIn, children, actions, ...props }) => (
+    !isLoggedIn || loading ? null : <button {...props} onClick={actions.signOutRoutine}>{children}</button>
 );
 
 const mapDispatchToProps = (dispatch) => ({
@@ -12,5 +13,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(state => ({
-    isLoggedIn: state.auth.signIn.isLoggedIn,
+    loading: state.auth.loading,
+    isLoggedIn: state.auth.isLoggedIn
 }), mapDispatchToProps)(Logout);

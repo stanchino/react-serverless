@@ -1,8 +1,9 @@
 import { expectCallbacks } from "./shared-examples";
 
 const factory = (err, result) => ({
-    CognitoUserPool: jest.fn(),
-    CookieStorage: jest.fn(),
+    CognitoUserPool: jest.fn(() => ({
+        getCurrentUser: jest.fn()
+    })),
     CognitoUser: jest.fn(() => ({
         confirmRegistration: (code, forceAliasCreation, callback) => {
             callback(err, result);

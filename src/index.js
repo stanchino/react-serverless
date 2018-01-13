@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/es/integration/react";
 
 import createHistory from "history/createBrowserHistory";
 import configureStore from "./stores";
@@ -14,13 +13,11 @@ import App from "./App";
 import "./index.css";
 
 const history = createHistory();
-const { persistor, store } = configureStore(history);
+const store = configureStore(history);
 
 ReactDOM.render(
     <Provider store={store}>
-        <PersistGate persistor={persistor}>
-            <App history={history}/>
-        </PersistGate>
+        <App history={history}/>
     </Provider>,
     document.getElementById("root")
 );

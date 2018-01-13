@@ -1,19 +1,22 @@
 import React from "react";
-import { reduxForm } from "redux-form";
 import { Provider } from "react-redux";
-import createMemoryHistory from "history/createBrowserHistory";
+import configureStore from "redux-mock-store";
+import renderer from "react-test-renderer";
+import { mount } from "enzyme";
 
-import configureStore from "../../../stores/index";
+import { Form } from "..";
 
-import wrapWithForm from "../Form";
-import { matchSnapshot } from "./shared-examples";
-
-const history = createMemoryHistory();
-const { store } = configureStore(history);
-
-const FormComponent = wrapWithForm(<div/>);
-const Form = reduxForm({ form: 'test', onSubmit: jest.fn() })(FormComponent);
+const mockStore = configureStore();
 
 describe("Form", () => {
-    matchSnapshot(<Provider store={store}><Form/></Provider>);
+    it("matches the snapshot", () => {
+        const store = mockStore({ auth: { flash: { error: null, notice: null } } });
+        expect(renderer.create(<Provider store={store}><Form form={{ handleSubmit: jest.fn() }}/></Provider>).toJSON()).toMatchSnapshot();
+    });
+
+    it("while loading", () => {
+        const store = mockStore({ auth: { flash: { error: null, notice: null } }});
+        const subject = mount(<Provider store={store}><Form form={{ handleSubmit: jest.fn() }} loading={true} /></Provider>);
+        expect(subject.text()).toMatch("Loading...");
+    });
 });

@@ -7,8 +7,7 @@ import createMemoryHistory from "history/createBrowserHistory";
 import configureStore from "../../stores";
 
 import { Home, Public, PrivateComponent, Private, NotFound } from "..";
-import { SignInForm } from "../../auth/components";
-import { signInRoutine } from "../../auth/actions";
+import { authRoutine } from "../../auth/actions";
 
 const testComponent = (description, component) => {
     it(description, () => {
@@ -17,43 +16,36 @@ const testComponent = (description, component) => {
 };
 
 describe("components", () => {
-    testComponent("renders Home without errors", <Home/>);
-    testComponent("renders Public without errors", <Public/>);
-    testComponent("renders PrivateComponent without errors", <PrivateComponent/>);
-    testComponent("renders NotFound without errors", <NotFound/>);
+    testComponent("renders Home without errors", Home);
+    testComponent("renders Public without errors", Public);
+    testComponent("renders PrivateComponent without errors", PrivateComponent);
+    testComponent("renders NotFound without errors", NotFound);
 });
 
 describe("Private", () => {
     const history = createMemoryHistory();
-    const { _, store } = configureStore(history);
+    const store = configureStore(history);
     let subject;
 
     describe("for unauthenticated users", () => {
         beforeEach(() => {
-            subject = mount(<Provider store={store}><Private/></Provider>);
+            subject = mount(<Provider store={store}>{Private}</Provider>);
         });
 
-        it("will render the login form", () => {
-            expect(subject).toContainReact(<SignInForm/>);
-        });
 
         it("will not show the private contents", () => {
-            expect(subject).not.toContainReact(<PrivateComponent/>);
+            expect(subject).not.toContainReact(PrivateComponent);
         });
     });
 
     describe("for authenticated users", () => {
         beforeEach(() => {
-            store.dispatch(signInRoutine.success({profile: "blah"}));
-            subject = mount(<Provider store={store}><Private/></Provider>);
-        });
-
-        it("will not render the login form", () => {
-            expect(subject).not.toContainReact(<SignInForm/>);
+            store.dispatch(authRoutine.success({ profile: { email: "john@doe.com", password: "pass" } }));
+            subject = mount(<Provider store={store}>{Private}</Provider>);
         });
 
         it("will show the private contents", () => {
-            expect(subject).toContainReact(<PrivateComponent/>);
+            expect(subject).toContainReact(PrivateComponent);
         });
     });
 });

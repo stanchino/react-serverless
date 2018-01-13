@@ -11,7 +11,8 @@ const respondsWith = (description, defer, err, success, expected) => {
         expect(signUpRequest(payload.email, payload.password))[defer].toEqual(expected);
         expect(spy).toHaveBeenCalled();
     });
-}
+};
+
 describe("test signUpRequest", () => {
     respondsWith("registers the user successfully", "resolves", null, { success: 'success'}, { success: 'success'});
     respondsWith("raises an error when the registration fails", "rejects", { error: 'error'}, null, { error: 'error'});

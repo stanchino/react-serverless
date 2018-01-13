@@ -1,14 +1,16 @@
-import { call, put, select } from "redux-saga/effects";
+import {call, put, select} from "redux-saga/effects";
 import { signOutRoutine } from "../actions";
 import { signOutRequest } from "../services";
 
-export const getProfile = state => ({ ...state.auth.signIn.profile });
+export const getUser = state => (state.auth.user);
 
 export function* handleSignOutSaga() {
+    const user = yield select(getUser);
     try {
-        const {sub} = yield select(getProfile);
         yield put(signOutRoutine.request());
-        yield call(signOutRequest, sub);
+        if (user) {
+            yield call(signOutRequest, user);
+        }
     } finally {
         yield put(signOutRoutine.fulfill())
     }

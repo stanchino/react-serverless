@@ -1,27 +1,32 @@
 import { call } from "redux-saga/effects";
 import { signOutRoutine } from "../../actions";
 import { signOutRequest } from "../../services";
-import { handleSignOutSaga, getProfile } from "../signOut";
+import { handleSignOutSaga, getUser } from "../signOut";
 
-import {finalizeSaga, setupSelectSaga, testSelector} from "./shared-examples";
+import { finalizeSaga, setupSelectSaga, testSelector} from "./shared-examples";
 
-const payload = {};
-const profile = { sub: "user" };
 
-const initializeSaga = () => (
-    setupSelectSaga(handleSignOutSaga, payload, signOutRoutine, getProfile, profile)
+const initializeSaga = user => (
+    setupSelectSaga(handleSignOutSaga, {}, signOutRoutine, getUser, user)
 );
 
 describe("handleSignOutSaga", () => {
-    describe("Signs the user out and always succeeds", () => {
-        const it = initializeSaga();
+    describe("When the user is present", () => {
+        const user = jest.fn();
+        const it = initializeSaga(user);
 
         it("calls signOutRequest", result => {
-            expect(result).toEqual(call(signOutRequest, profile.sub));
+            expect(result).toEqual(call(signOutRequest, user));
         });
+
+        finalizeSaga(it, signOutRoutine);
+    });
+
+    describe("When the user is missing", () => {
+        const it = initializeSaga();
 
         finalizeSaga(it, signOutRoutine);
     });
 });
 
-testSelector(getProfile, { auth: { signIn: { profile: profile } }}, profile);
+testSelector(getUser, { auth: { user: 'user' } }, 'user');

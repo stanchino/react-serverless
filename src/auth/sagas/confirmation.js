@@ -1,23 +1,27 @@
 import { call, put, select } from "redux-saga/effects";
-import { formError } from "./index";
-import { signInRoutine, confirmationRoutine } from "../actions";
+import { replace } from "react-router-redux";
+
+import { confirmationRoutine, signInRoutine } from "../actions";
+
 import { confirmationRequest } from "../services";
 
-export const getProfile = state => ({ ...state.auth.signUp.profile });
+import { formError } from ".";
+
+export const auth = state => ({ ...state.auth });
 
 export function* handleConfirmationSaga({ payload: { values: { code } } }) {
+    const { profile, pathname } = yield select(auth);
+    const { email, password } = profile;
     try {
-        const { email } = yield select(getProfile);
         yield put(confirmationRoutine.request());
         yield call(confirmationRequest, email, code);
-        yield put(confirmationRoutine.success());
-        yield put(signInRoutine.success({ email: email }));
+        yield put(signInRoutine.trigger({ values: { email: email, password: password } }));
+        yield put(replace(pathname));
     } catch (error) {
         yield formError(confirmationRoutine, {
             code: "Invalid code",
             _error: error.message
         });
-    } finally {
         yield put(confirmationRoutine.fulfill());
     }
 }
