@@ -4,8 +4,8 @@ import { bindActionCreators } from "redux";
 
 import { signOutRoutine } from "../actions";
 
-const Logout = ({ loading, children, actions, ...props }) => (
-    loading ? null : <button {...props} onClick={actions.signOutRoutine}>{children}</button>
+const Logout = ({ loading, isLoggedIn, children, actions, ...props }) => (
+    !isLoggedIn || loading ? null : <button {...props} onClick={actions.signOutRoutine}>{children}</button>
 );
 
 const mapDispatchToProps = (dispatch) => ({
@@ -13,5 +13,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(state => ({
-    loading: state.auth.loading
+    loading: state.auth.loading,
+    isLoggedIn: state.auth.isLoggedIn
 }), mapDispatchToProps)(Logout);

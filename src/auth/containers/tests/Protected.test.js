@@ -1,36 +1,34 @@
 import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
-import createMemoryHistory from "history/createBrowserHistory";
-
-import configureStore from "../../../stores";
+import configureStore from "redux-mock-store";
 
 import { Protected }  from "..";
-import { authRoutine } from "../../actions";
 
-const history = createMemoryHistory();
-const store = configureStore(history);
+const mockStore = configureStore();
 
-const ChildComponent = () => (<div/>);
-const SignInForm = () => (<form/>);
+const childComponent = (<div/>);
+const signInForm = (<form/>);
 
-const subject = (component = SignInForm) => (
-    mount(<Provider store={store}><Protected component={component}><ChildComponent/></Protected></Provider>)
+const subject = (store, component = signInForm) => (
+    mount(<Provider store={store}><Protected component={component}>{childComponent}</Protected></Provider>)
 );
 
 describe("Protected Component", () => {
-    describe("when the user is not registered", () => {
+    describe("when the user is not logged in", () => {
+        const store = mockStore({ auth: { isLoggedIn: false } });
+
         it('and the component is not null', () => {
-            expect(subject()).toContainReact(<SignInForm />);
+            expect(subject(store)).toContainReact(signInForm);
         });
 
         it('and the component is null', () => {
-            expect(subject(null)).not.toContainReact(<SignInForm/>);
+            expect(subject(store, null)).not.toContainReact(signInForm);
         })
     });
 
     it("when the user is logged in", () => {
-        store.dispatch(authRoutine.success());
-        expect(subject()).toContainReact(<ChildComponent/>);
+        const store = mockStore({ auth: { isLoggedIn: true } });
+        expect(subject(store)).toContainReact(childComponent);
     });
 });

@@ -1,10 +1,7 @@
-import React from "react";
-import renderer from "react-test-renderer";
+import { matchSnapshot } from "./shared-examples";
 
 import { SubmitButton } from "..";
 
 describe("SubmitButton", () => {
-    it("matches the snapshot", () => {
-        expect(renderer.create(<SubmitButton />).toJSON()).toMatchSnapshot();
-    });
+    it("matches the snapshot", () => matchSnapshot(SubmitButton, { form: { pristine: false, submitting: false } }));
 });

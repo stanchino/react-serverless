@@ -1,8 +1,7 @@
 import React from "react";
 
-import { Message } from ".";
-
-import { Flash } from "../containers";
+import Message from "./Message";
+import Flash from "../containers/Flash";
 
 export default ({ error }) => (
     <div className={"messages"}>

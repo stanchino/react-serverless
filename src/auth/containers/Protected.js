@@ -1,8 +1,7 @@
-import React from "react";
 import { connect } from "react-redux";
 
 const componentOrNull = (component) => (
-    component ? React.createElement(component) : null
+    component ? component : null
 );
 
 const ProtectedComponent = ({ isLoggedIn, children, component }) => (

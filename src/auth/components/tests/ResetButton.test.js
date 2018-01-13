@@ -1,10 +1,7 @@
-import React from "react";
-import renderer from "react-test-renderer";
+import { matchSnapshot } from "./shared-examples";
 
 import { ResetButton } from "..";
 
 describe("ResetButton", () => {
-    it("matches the snapshot", () => {
-        expect(renderer.create(<ResetButton />).toJSON()).toMatchSnapshot();
-    });
+    it("matches the snapshot", () => matchSnapshot(ResetButton, { form: { pristine: false, submitting: false } }));
 });

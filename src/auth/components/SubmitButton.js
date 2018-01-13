@@ -1,5 +1,5 @@
 import React from "react";
 
-export default ({ pristine, submitting, children }) => (
+export default ({ children, form: { pristine, submitting } }) => (
     <button type={"submit"} disabled={pristine || submitting}>{children}</button>
 );

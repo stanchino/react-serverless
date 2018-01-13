@@ -1,12 +1,12 @@
 import React from "react";
 
-import { Messages } from ".";
+import Messages from "./Messages";
 
-export default ({ loading, error, handleSubmit, onSubmit, children }) => (
+export default ({ children, loading, onSubmit, form }) => (
     loading ?
         "Loading..." :
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Messages error={error} />
-            {children}
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+            <Messages error={form.error} />
+            {React.Children.map(children, child => React.cloneElement(child, { form: form }))}
         </form>
 );

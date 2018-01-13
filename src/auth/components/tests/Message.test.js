@@ -1,10 +1,7 @@
-import React from "react";
-import renderer from "react-test-renderer";
+import { matchSnapshot } from "./shared-examples";
 
-import { Message } from "..";
+import Message from "../Message";
 
 describe("Message", () => {
-    it("matches the snapshot", () => {
-        expect(renderer.create(<Message />).toJSON()).toMatchSnapshot();
-    });
+    it("matches the snapshot", () => matchSnapshot(Message));
 });

@@ -1,25 +1,29 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { mount } from "enzyme";
-import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "../../../stores";
-
-import { signOutRoutine } from "../../actions";
+import configureStore from "redux-mock-store";
 
 import { SignOutLink } from "..";
 
-const history = createMemoryHistory();
-const store = configureStore(history);
+const mockStore = configureStore();
+const store = state => mockStore(state);
 
 describe("SignOutLink Component", () => {
-    const expectButton = () => (expect(mount(<Provider store={store}><SignOutLink /></Provider>).find("button")));
-    it("when data is loading", () => {
-        store.dispatch(signOutRoutine.request());
-        expectButton().toBeEmpty();
+    const expectButton = store => (expect(mount(<Provider store={store}><SignOutLink /></Provider>).find("button")));
+    it("while page is loading", () => {
+        const state = { auth: { loading: true } };
+        expectButton(store(state)).toBeEmpty();
     });
 
-    it("when data is loaded", () => {
-        store.dispatch(signOutRoutine.fulfill());
-        expectButton().toBePresent();
-    })
+    describe("when the state is loaded", () => {
+        const state = isLoggedIn => ({ auth: { loading: false, isLoggedIn: isLoggedIn } });
+
+        it("when user is signed in is loaded", () => {
+            expectButton(store(state(true))).toBePresent();
+        });
+
+        it("when user is not signed in is loaded", () => {
+            expectButton(store(state(false))).toBeEmpty();
+        });
+    });
 });

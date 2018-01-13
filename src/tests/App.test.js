@@ -5,8 +5,8 @@ import { mount } from "enzyme";
 import createMemoryHistory from "history/createBrowserHistory";
 import configureStore from "../stores";
 
-import { Home, Public, PrivateComponent, NotFound } from "../components";
-import { SignInForm, SignUpForm, ConfirmationForm, SignOutLink } from "../auth/containers";
+import { ConfirmationForm, Home, NotFound, PrivateComponent, Public, SignInForm, SignUpForm } from "../components";
+import { SignOutLink } from "../auth";
 
 import { signUpRoutine, authRoutine, signOutRoutine } from "../auth/actions";
 
@@ -22,7 +22,12 @@ const subject = () => (
 const testRoute = (description, path, component, count = 1) => {
     it(description, () => {
         history.push(path);
-        expect(subject().find(component).length).toEqual(count);
+        if (1 === count) {
+            expect(subject()).toContainReact(component);
+        } else if (0 === count) {
+            expect(subject()).not.toContainReact(component);
+        }
+
     });
 };
 
@@ -53,8 +58,7 @@ describe("routes", () => {
             });
 
             it("logs the user in with valid credentials", () => {
-                expect(subject().find(SignInForm).length).toEqual(0);
-                expect(subject().find(SignOutLink).length).toEqual(1);
+                expect(subject()).not.toContainReact(SignInForm);
             });
         });
 
@@ -77,7 +81,6 @@ describe("routes", () => {
         });
 
         testRoute("shows the home page", "/", Home);
-        testRoute("shows the logout link", "/", SignOutLink);
         testRoute("shows the public page", "/public", Public);
         testRoute("displays the NotFound component", "/testUrlForNotFound", NotFound);
         testRoute("does not show the Login form for the /private path", "/private", SignInForm, 0);

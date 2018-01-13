@@ -1,10 +1,7 @@
-import React from "react";
-import renderer from "react-test-renderer";
+import { matchSnapshot } from "./shared-examples";
 
 import { ActionButton } from "..";
 
 describe("ActionButton", () => {
-    it("matches the snapshot", () => {
-        expect(renderer.create(<ActionButton />).toJSON()).toMatchSnapshot();
-    });
+    it("matches the snapshot", () => matchSnapshot(ActionButton));
 });
