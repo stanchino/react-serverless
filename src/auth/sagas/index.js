@@ -1,4 +1,4 @@
-import {takeEvery, put } from "redux-saga/effects";
+import { takeEvery, put } from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
 
 import { routinePromiseWatcherSaga } from "redux-saga-routines";
@@ -10,23 +10,23 @@ import { handleSignInSaga } from "./signIn";
 import { handleAuthSaga } from "./auth";
 import { handleSignOutSaga } from "./signOut";
 
-function* signUpWatcher() {
+export function* signUpWatcher() {
     yield takeEvery(signUpRoutine.TRIGGER, handleSignUpSaga);
 }
 
-function* confirmationWatcher() {
+export function* confirmationWatcher() {
     yield takeEvery(confirmationRoutine.TRIGGER, handleConfirmationSaga);
 }
 
-function* signInWatcher() {
+export function* signInWatcher() {
     yield takeEvery(signInRoutine.TRIGGER, handleSignInSaga);
 }
 
-function* authWatcher() {
+export function* authWatcher() {
     yield takeEvery(authRoutine.TRIGGER, handleAuthSaga);
 }
 
-function* signOutWatcher() {
+export function* signOutWatcher() {
     yield takeEvery(signOutRoutine.TRIGGER, handleSignOutSaga);
 }
 

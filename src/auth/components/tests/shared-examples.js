@@ -4,16 +4,17 @@ import renderer from "react-test-renderer";
 import createStore from "redux-mock-store";
 
 import { initialState } from "../../reducers/auth";
-import { AuthForm } from "../..";
+import { connectedForm } from "../../containers/AuthForm";
 
 const mockStore = createStore();
 const store = mockStore({ auth: initialState });
+const Form = connectedForm({ form: "test", onSubmit: jest.fn() });
 
 export const matchFormSnapshot = Component => expect(renderer.create(
     <Provider store={store}>
-        <AuthForm form={"test"} onSubmit={jest.fn()}>
+        <Form>
             <Component />
-        </AuthForm>
+        </Form>
     </Provider>
 ).toJSON()).toMatchSnapshot();
 

@@ -1,6 +1,8 @@
-import AuthForm from "./AuthForm";
+import ConfirmationForm from "./ConfirmationForm";
 import Protected from "./Protected";
+import SignInForm from "./SignInForm";
 import SignOutLink from "./SignOutLink";
+import SignUpForm from "./SignUpForm";
 import UnauthenticatedLink from "./UnauthenticatedLink";
 
-export { AuthForm, UnauthenticatedLink, SignOutLink, Protected }
+export { ConfirmationForm, Protected, SignInForm, SignOutLink, SignUpForm, UnauthenticatedLink }

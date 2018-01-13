@@ -1,4 +1,4 @@
-import { call, put, select} from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
 import sagaHelper from "redux-saga-testing";
 import { signUpRoutine } from "../../actions";

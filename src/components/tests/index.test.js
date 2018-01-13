@@ -2,17 +2,15 @@ import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
-
-import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "../../stores";
+import configureStore from "redux-mock-store";
 
 import { Home, Public, PrivateComponent, Private, NotFound } from "..";
-import { authRoutine } from "../../auth/actions";
+
+const initialState = { isLoggedIn: false, flash: { error: null, notice: null } };
+const mockStore = configureStore();
 
 const testComponent = (description, component) => {
-    it(description, () => {
-        expect(renderer.create(component).toJSON()).toMatchSnapshot();
-    });
+    it(description, () => expect(renderer.create(component).toJSON()).toMatchSnapshot());
 };
 
 describe("components", () => {
@@ -23,29 +21,19 @@ describe("components", () => {
 });
 
 describe("Private", () => {
-    const history = createMemoryHistory();
-    const store = configureStore(history);
-    let subject;
-
     describe("for unauthenticated users", () => {
-        beforeEach(() => {
-            subject = mount(<Provider store={store}>{Private}</Provider>);
-        });
-
+        const store = mockStore({ auth: initialState });
 
         it("will not show the private contents", () => {
-            expect(subject).not.toContainReact(PrivateComponent);
+            expect(mount(<Provider store={store}>{Private}</Provider>)).not.toContainReact(PrivateComponent);
         });
     });
 
     describe("for authenticated users", () => {
-        beforeEach(() => {
-            store.dispatch(authRoutine.success({ profile: { email: "john@doe.com", password: "pass" } }));
-            subject = mount(<Provider store={store}>{Private}</Provider>);
-        });
+        const store = mockStore({ auth: { ...initialState, isLoggedIn: true } });
 
         it("will show the private contents", () => {
-            expect(subject).toContainReact(PrivateComponent);
+            expect(mount(<Provider store={store}>{Private}</Provider>)).toContainReact(PrivateComponent);
         });
     });
 });

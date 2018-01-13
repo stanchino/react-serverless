@@ -1,4 +1,3 @@
-import React from "react";
 import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 
@@ -10,10 +9,10 @@ const mapStateToProps = state => ({
     isRegistered: state.auth.isRegistered
 });
 
-export const connectForm = props => component => (
+export const connectComponent = props => component => (
     reduxForm({ propNamespace: 'form', ...props })(connect(mapStateToProps)(component))
 );
 
-export default props => (
-    React.createElement(connectForm(props)(connect(mapStateToProps)(Form)))
+export const connectedForm = props => (
+    connectComponent(props)(Form)
 );

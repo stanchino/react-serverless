@@ -1,16 +1,17 @@
 import React from "react";
 import { Route, Redirect } from "react-router";
 
-import { signIn, signUp, confirmation } from "../auth/actions";
 import {
     ActionButton,
-    AuthForm,
     ConfirmationCode,
     Email,
     Password,
     PasswordConfirmation,
     Protected,
     ResetButton,
+    SignInForm as SignIn,
+    SignUpForm as SignUp,
+    ConfirmationForm as Confirmation,
     SubmitButton,
 } from "../auth";
 
@@ -35,32 +36,32 @@ export const PrivateComponent = (
 );
 
 export const SignInForm = (
-    <AuthForm form={"signIn"} onSubmit={signIn}>
+    <SignIn>
         <Email autoComplete={"email"} />
         <Password autoComplete={"new-password"} />
         <ActionButton>Forgotten Password?</ActionButton>
         <SubmitButton>Sign In</SubmitButton>
         <ResetButton>Cancel</ResetButton>
-    </AuthForm>
+    </SignIn>
 );
 
 export const SignUpForm = (
-    <AuthForm form={"signUp"} onSubmit={signUp}>
+    <SignUp>
         <Email autoComplete={"email"}/>
         <Password autoComplete={"new-password"}/>
         <PasswordConfirmation autoComplete={"new-password"}/>
         <SubmitButton>Sign Up</SubmitButton>
         <ResetButton>Cancel</ResetButton>
-    </AuthForm>
+    </SignUp>
 );
 
 export const ConfirmationForm = (
-    <AuthForm form={"confirmation"} onSubmit={confirmation}>
+    <Confirmation>
         <ConfirmationCode />
         <ActionButton>Request New Code</ActionButton>
         <SubmitButton>Confirm</SubmitButton>
         <ResetButton>Reset</ResetButton>
-    </AuthForm>
+    </Confirmation>
 );
 
 export const Private = (
