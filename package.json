@@ -11,7 +11,7 @@
     "@types/redux-actions": "^2.2.3",
     "@types/redux-form": "^7.0.12",
     "amazon-cognito-identity-js": "^1.31.0",
-    "aws-sdk": "^2.181.0",
+    "aws-sdk": "^2.182.0",
     "history": "^4.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -27,14 +27,16 @@
     "redux-saga-routines": "^2.2.2"
   },
   "scripts": {
+    "lint": "node_modules/eslint/bin/eslint.js src",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --coverage -u",
+    "test": "npm run lint && react-scripts test --env=jsdom --coverage -u",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "eslint-plugin-jest": "^21.6.2",
     "jest-cli": "^21.2.1",
     "jest-enzyme": "^4.0.2",
     "react-test-renderer": "^16.2.0",
@@ -63,6 +65,16 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:jest/recommended"
+    ],
+    "rules": {
+      "jest/no-disabled-tests": "error",
+      "jest/no-focused-tests": "error",
+      "jest/no-identical-title": "error",
+      "jest/prefer-to-have-length": "error",
+      "jest/valid-expect": "error"
+    }
   }
 }

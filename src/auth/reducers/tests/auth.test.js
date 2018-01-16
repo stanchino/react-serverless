@@ -44,7 +44,7 @@ describe("auth reducer", () => {
     it("should return the initial state", () => expect(reducer(undefined, {})).toEqual(initialState));
     describe("for the signUpRoutine", () => behavesLikeReducerWithPayload(signUpRoutine, { isRegistered: true }, { isRegistered: false }));
     describe("for the confirmationRoutine", () => behavesLikeReducerWithoutPayload(confirmationRoutine, {}, {}));
-    describe("for the signUpRoutine", () => behavesLikeReducerWithPayload(signInRoutine, { isRegistered: true }, {}));
+    describe("for the signInRoutine", () => behavesLikeReducerWithPayload(signInRoutine, { isRegistered: true }, {}));
     describe("for the authRoutine", () => behavesLikeReducerWithPayload(authRoutine, { isLoggedIn: true, isRegistered: true }, { isLoggedIn: false }, { loading: true }));
     describe("for the signOutRoutine", () => {
         testAction(reducer, signOutRoutine.request(), {

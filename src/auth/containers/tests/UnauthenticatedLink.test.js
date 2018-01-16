@@ -35,7 +35,7 @@ describe("UnauthenticatedLink Component", () => {
     });
 
     it("while page is loading", () => {
-        expect(mount(app({ loading: true })).find('NavLink').length).toEqual(0);
+        expect(mount(app({ loading: true })).find('NavLink')).toHaveLength(0);
     });
 
     describe("when the state is loaded", () => {
