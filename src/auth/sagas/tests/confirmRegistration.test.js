@@ -1,9 +1,9 @@
 import { call, put } from "redux-saga/effects";
 import { replace } from "react-router-redux";
-import {confirmationRoutine, signInRoutine } from "../../actions";
-import { confirmationRequest } from "../../services";
+import { confirmRegistrationRoutine, signInRoutine } from "../../actions";
+import { confirmRegistrationRequest } from "../../services";
 
-import { handleConfirmationSaga, auth } from "../confirmation";
+import { handleConfirmRegistrationSaga, authSelector } from "../confirmRegistration";
 import { setupSelectSaga, testSelector, testServiceFailure } from "./shared-examples";
 
 const values = { code: "1234" };
@@ -11,15 +11,15 @@ const payload = { payload: { values: values } };
 const state = { profile: { email: "john@doe.com", password: "pass" }, pathname: "/path" };
 
 const initializeSaga = () => (
-    setupSelectSaga(handleConfirmationSaga, payload, confirmationRoutine, auth, state)
+    setupSelectSaga(handleConfirmRegistrationSaga, payload, confirmRegistrationRoutine, authSelector, state)
 );
 
-describe("handleConfirmationSaga", () => {
-    describe("When confirmation is successful", () => {
+describe("handleConfirmRegistrationSaga", () => {
+    describe("When confirmRegistration is successful", () => {
         const it = initializeSaga();
 
-        it("calls confirmationRequest", result => {
-            expect(result).toEqual(call(confirmationRequest, "john@doe.com", values.code));
+        it("calls confirmRegistrationRequest", result => {
+            expect(result).toEqual(call(confirmRegistrationRequest, "john@doe.com", values.code));
         });
 
         it("and then triggers the signInRoutine", result => {
@@ -35,7 +35,7 @@ describe("handleConfirmationSaga", () => {
         });
     });
 
-    testServiceFailure(initializeSaga, confirmationRequest, confirmationRoutine, ["john@doe.com", values.code]);
+    testServiceFailure(initializeSaga, confirmRegistrationRequest, confirmRegistrationRoutine, ["john@doe.com", values.code]);
 });
 
-testSelector(auth, { auth: state }, state);
+testSelector(authSelector, { auth: state }, state);

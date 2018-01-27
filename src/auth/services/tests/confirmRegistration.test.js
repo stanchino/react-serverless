@@ -11,8 +11,8 @@ const factory = (err, result) => ({
     }))
 });
 
-describe("test confirmation", () => {
-    const subject = () => (require("../confirmation").default);
+describe("test confirmRegistration", () => {
+    const subject = () => (require("../confirmRegistration").default);
 
     beforeEach(() => {
         jest.resetModules();
@@ -26,7 +26,7 @@ describe("test confirmation", () => {
         expectCallbacks([mocks.CognitoUserPool, mocks.CognitoUser]);
     });
 
-    it ('raises an error when the confirmation fails', () => {
+    it ('raises an error when the confirmRegistration fails', () => {
         const mocks = factory({ error: 'error'}, null);
         jest.doMock("amazon-cognito-identity-js", () => (mocks));
 

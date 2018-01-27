@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router";
+import { NavLink } from "react-router-dom";
 
 import {
     ActionButton,
@@ -9,11 +10,15 @@ import {
     PasswordConfirmation,
     Protected,
     ResetButton,
+    PasswordResetRequestForm as PasswordResetRequest,
+    PasswordResetConfirmForm as PasswordResetConfirm,
     SignInForm as SignIn,
     SignUpForm as SignUp,
-    ConfirmationForm as Confirmation,
+    ConfirmRegistrationForm as Confirmation,
     SubmitButton,
 } from "../auth";
+
+export { PasswordResetForm } from "../auth";
 
 export const RouteWithRedirect = ({ path , to, ...props }) => (
     <Route path={path}>
@@ -23,40 +28,42 @@ export const RouteWithRedirect = ({ path , to, ...props }) => (
     </Route>
 );
 
-export const Home = (
-    <div>Home</div>
+export const Home = props => (
+    <div {...props}>Home</div>
 );
 
-export const Public = (
-    <div>Public</div>
+export const Public = props => (
+    <div {...props}>Public</div>
 );
 
-export const PrivateComponent = (
-    <div>Private</div>
+export const PrivateComponent = props => (
+    <div {...props}>Private</div>
 );
 
-export const SignInForm = (
-    <SignIn>
+export const SignInForm = props => (
+    <SignIn {...props}>
         <Email autoComplete={"email"} />
         <Password autoComplete={"new-password"} />
-        <ActionButton>Forgotten Password?</ActionButton>
+        <NavLink to={"/auth/reset"}>Forgotten Password?</NavLink>
         <SubmitButton>Sign In</SubmitButton>
         <ResetButton>Cancel</ResetButton>
     </SignIn>
 );
 
-export const SignUpForm = (
-    <SignUp>
+export const SignUpForm = props => (
+    <SignUp {...props}>
         <Email autoComplete={"email"}/>
         <Password autoComplete={"new-password"}/>
         <PasswordConfirmation autoComplete={"new-password"}/>
         <SubmitButton>Sign Up</SubmitButton>
         <ResetButton>Cancel</ResetButton>
+        <br/>
+        <NavLink to={"/auth/reset"}>Forgotten Password?</NavLink>
     </SignUp>
 );
 
-export const ConfirmationForm = (
-    <Confirmation>
+export const ConfirmationForm = props => (
+    <Confirmation {...props}>
         <ConfirmationCode />
         <ActionButton>Request New Code</ActionButton>
         <SubmitButton>Confirm</SubmitButton>
@@ -64,17 +71,35 @@ export const ConfirmationForm = (
     </Confirmation>
 );
 
-export const Private = (
-    <Protected component={SignInForm}>
-        {PrivateComponent}
+export const Private = props => (
+    <Protected component={SignInForm} {...props}>
+        <PrivateComponent />
     </Protected>
 );
 
-export const NotFound = (
-    <div>
+export const NotFound = props => (
+    <div {...props}>
         <h3>404 page not found</h3>
         <p>We are sorry but the page you are looking for does not exist.</p>
     </div>
+);
+
+export const PasswordResetRequestForm = props => (
+    <PasswordResetRequest {...props}>
+        <Email autoComplete={"email"} />
+        <SubmitButton>Send Code</SubmitButton>
+        <ResetButton>Cancel</ResetButton>
+    </PasswordResetRequest>
+);
+
+export const PasswordResetConfirmForm = props => (
+    <PasswordResetConfirm {...props}>
+        <ConfirmationCode />
+        <Password autoComplete={"new-password"}/>
+        <PasswordConfirmation autoComplete={"new-password"}/>
+        <SubmitButton>Reset Password</SubmitButton>
+        <ResetButton>Cancel</ResetButton>
+    </PasswordResetConfirm>
 );
 
 
