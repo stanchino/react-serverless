@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Switch, Route } from "react-router";
 
-import { UnauthenticatedLink, SignOutLink } from "./auth";
+import { Unauthenticated, UnauthenticatedLink, SignOutLink } from "./auth";
 
 import {
     ConfirmationForm,
@@ -38,10 +38,12 @@ export default () => (
             <RouteWithRedirect to={"/"} path={"/auth/register"} component={SignUpForm} />
             <RouteWithRedirect to={"/"} path={"/auth/confirm"} component={ConfirmationForm} />
             <Route path={"/auth/reset"}>
-                <PasswordResetForm
-                    requestForm={PasswordResetRequestForm}
-                    confirmationForm={PasswordResetConfirmForm}
-                />
+                <Unauthenticated component={NotFound}>
+                    <PasswordResetForm
+                        requestForm={PasswordResetRequestForm}
+                        confirmationForm={PasswordResetConfirmForm}
+                    />
+                </Unauthenticated>
             </Route>
             <Route><NotFound /></Route>
         </Switch>
