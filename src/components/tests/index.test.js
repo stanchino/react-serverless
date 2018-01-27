@@ -1,10 +1,18 @@
 import React from "react";
-import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
+import connectComponent from "../../tests/shared-examples";
 
-import { Home, Public, PrivateComponent, Private, NotFound } from "..";
+import {
+    Home,
+    PasswordResetRequestForm,
+    PasswordResetConfirmForm,
+    Private,
+    PrivateComponent,
+    Public,
+    NotFound
+} from "..";
 
 const initialState = { isLoggedIn: false, flash: { error: null, notice: null } };
 const mockStore = configureStore();
@@ -14,18 +22,26 @@ const testComponent = (description, component) => {
 };
 
 describe("components", () => {
-    testComponent("renders Home without errors", Home);
-    testComponent("renders Public without errors", Public);
-    testComponent("renders PrivateComponent without errors", PrivateComponent);
-    testComponent("renders NotFound without errors", NotFound);
+    testComponent("renders Home without errors", <Home />);
+    testComponent("renders Public without errors", <Public />);
+    testComponent("renders PrivateComponent without errors", <PrivateComponent />);
+    testComponent("renders NotFound without errors", <NotFound />);
 });
 
-describe("Private", () => {
+describe("containers", () => {
+    const store = mockStore({ auth: initialState });
+    testComponent("renders PasswordResetRequestForm without errors", <Provider store={store}><PasswordResetRequestForm /></Provider>);
+    testComponent("renders PasswordResetConfirmationForm without errors", <Provider store={store}><PasswordResetConfirmForm /></Provider>);
+});
+
+describe("Private Component", () => {
+    const subject = store => connectComponent(Private, store);
+
     describe("for unauthenticated users", () => {
         const store = mockStore({ auth: initialState });
 
         it("will not show the private contents", () => {
-            expect(mount(<Provider store={store}>{Private}</Provider>)).not.toContainReact(PrivateComponent);
+            expect(subject(store)).not.toContainReact(<PrivateComponent />);
         });
     });
 
@@ -33,7 +49,7 @@ describe("Private", () => {
         const store = mockStore({ auth: { ...initialState, isLoggedIn: true } });
 
         it("will show the private contents", () => {
-            expect(mount(<Provider store={store}>{Private}</Provider>)).toContainReact(PrivateComponent);
+            expect(subject(store)).toContainReact(<PrivateComponent />);
         });
     });
 });

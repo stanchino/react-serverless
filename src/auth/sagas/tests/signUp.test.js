@@ -27,7 +27,7 @@ describe("handleSignUpSaga", () => {
             testSignUpSuccess(result, { profile: { email: values.email, password: values.password } });
         });
 
-        it("then redirects to the confirmation URL", result => {
+        it("then redirects to the confirmRegistration URL", result => {
             expect(result).toEqual(put(replace("/auth/confirm")));
         });
 
