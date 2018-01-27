@@ -9,7 +9,7 @@ import { mount } from "enzyme";
 
 import { initialState } from "../../reducers/auth";
 
-import UnauthenticatedLink from "../UnauthenticatedLink";
+import { UnauthenticatedLink } from "..";
 
 const history = createHistory();
 const store = state => createStore([routerMiddleware(history)])({ auth: state });
